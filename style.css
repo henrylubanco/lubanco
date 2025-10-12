@@ -1,0 +1,126 @@
+/* Reset Básico para melhor consistência entre navegadores */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+/* --- Cabeçalho e Navegação --- */
+.cabecalho {
+    background-color: #333;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cabecalho h1 {
+    font-size: 1.5rem;
+}
+
+.menu-nav ul {
+    list-style: none;
+    display: flex;
+}
+
+.menu-nav li a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+.menu-nav li a:hover {
+    background-color: #575757;
+}
+
+/* --- Conteúdo Principal --- */
+.conteudo-principal {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.secao {
+    padding: 60px 20px;
+    margin-bottom: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.secao h2 {
+    color: #007bff;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.botao {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+}
+
+.botao:hover {
+    background-color: #0056b3;
+}
+
+/* Grid de Serviços */
+.servicos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.servico-item {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.servico-item h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* --- Rodapé --- */
+.rodape {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+/* --- Responsividade (Ajustes para Telas Menores) --- */
+@media (max-width: 768px) {
+    .cabecalho {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .menu-nav ul {
+        margin-top: 10px;
+        flex-direction: column;
+    }
+
+    .menu-nav li {
+        margin: 5px 0;
+    }
+}
