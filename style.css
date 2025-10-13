@@ -20,6 +20,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky; /* Mantém o cabeçalho fixo ao rolar */
+    top: 0;
+    z-index: 1000;
 }
 
 .cabecalho h1 {
@@ -98,7 +101,36 @@ body {
     margin-bottom: 10px;
 }
 
-/* --- Rodapé --- */
+/* --- Estilos para a Lista de Links Úteis --- */
+.lista-links {
+    list-style: none; /* Remove os marcadores de lista padrão */
+    padding: 0;
+}
+
+.lista-links li {
+    background-color: #f9f9f9;
+    border-left: 5px solid #007bff; /* Linha de destaque azul */
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    transition: background-color 0.3s;
+}
+
+.lista-links li:hover {
+    background-color: #eee;
+}
+
+.lista-links li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    display: block;
+}
+
+.lista-links li a:hover {
+    color: #007bff;
+}
+
+/* --- Rodapé e Links Sociais --- */
 .rodape {
     background-color: #333;
     color: white;
@@ -108,11 +140,52 @@ body {
     font-size: 0.9rem;
 }
 
+.rodape-conteudo {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 20px;
+}
+
+.social-links {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #575757; /* Linha de separação suave */
+    text-align: center;
+}
+
+.social-links a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+    transition: color 0.3s, background-color 0.3s;
+    background-color: #575757;
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.social-links a:hover {
+    color: #007bff;
+    background-color: white;
+}
+
+.link-rodape {
+    color: #ccc;
+    text-decoration: none;
+}
+
+.link-rodape:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
 /* --- Responsividade (Ajustes para Telas Menores) --- */
 @media (max-width: 768px) {
     .cabecalho {
         flex-direction: column;
         text-align: center;
+        padding: 1rem 1rem;
     }
 
     .menu-nav ul {
@@ -122,5 +195,17 @@ body {
 
     .menu-nav li {
         margin: 5px 0;
+    }
+    
+    .servicos-grid {
+        grid-template-columns: 1fr; /* Força uma única coluna em mobile */
+    }
+}
+
+@media (max-width: 600px) {
+    .social-links a {
+        margin: 5px 5px;
+        padding: 5px 8px;
+        font-size: 0.85rem;
     }
 }
