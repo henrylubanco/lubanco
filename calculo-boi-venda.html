@@ -93,7 +93,7 @@
             background: #c82333;
         }
 
-        /* Estilos dos campos de input e resultados (mantidos) */
+        /* Estilos dos campos de input e resultados */
         .input-group {
             margin-bottom: 20px;
         }
@@ -172,7 +172,7 @@
         }
 
 
-        /* Responsividade básica */
+        /* Responsividade básica (duplicado para garantir o funcionamento local) */
         @media (max-width: 768px) {
             .container-calculo {
                 flex-direction: column;
@@ -217,7 +217,7 @@
 
                 <div class="input-group">
                     <label for="preco-arroba">1. Preço Atual por Arroba (R$):</label>
-                    <input type="number" id="preco-arroba" placeholder="Ex: 290.00" value="290">
+                    <input type="number" id="preco-arroba" placeholder="Ex: R$ 290,00">
                 </div>
 
                 <div class="input-group">
@@ -227,13 +227,13 @@
 
                 <div class="input-group">
                     <label for="desconto-por-arroba">3. Desconto Padrão (Kg por arroba):</label>
-                    <input type="number" id="desconto-por-arroba" placeholder="Ex: 1.5 (quilos)" value="1.5">
+                    <input type="number" id="desconto-por-arroba" placeholder="Ex: 0,7 (quilos)">
                 </div>
                 
-                <!-- CONTAINER QUE SERÁ ESCONDIDO PARA MACHO -->
+                <!-- CONTAINER QUE SERÁ ESCONDIDO/EXIBIDO -->
                 <div class="input-group" id="desconto-fixo-container">
                     <label for="animais-desconto-fixo">4. Número de Animais com Desconto Fixo de 7,5 Kg (Tare):</label>
-                    <input type="number" id="animais-desconto-fixo" placeholder="Ex: 10" value="10">
+                    <input type="number" id="animais-desconto-fixo" placeholder="Ex: 7" >
                 </div>
                 
                 <div class="botoes-acao">
@@ -292,16 +292,17 @@
         function toggleDescontoFixo() {
             const tipoAnimal = document.getElementById('tipo-animal').value;
             const container = document.getElementById('desconto-fixo-container');
+            const inputAnimais = document.getElementById('animais-desconto-fixo');
             
             if (tipoAnimal === 'macho') {
                 container.style.display = 'none';
-                // Define o valor do input como 0 se for macho para garantir que não haja desconto fixo
-                document.getElementById('animais-desconto-fixo').value = 0; 
+                // Garante que o valor no input seja zero, mesmo que invisível
+                inputAnimais.value = 0; 
             } else {
                 container.style.display = 'block';
-                // Opcional: restaura para um valor padrão (10) se for fêmea, se o campo estiver vazio
-                if (document.getElementById('animais-desconto-fixo').value === '0') {
-                    document.getElementById('animais-desconto-fixo').value = 10;
+                // Restaura o valor padrão ou o último valor digitado se for 0
+                if (inputAnimais.value === '0') {
+                    inputAnimais.value = 10;
                 }
             }
         }
@@ -321,7 +322,7 @@
                 return;
             }
 
-            // Se o animal for Macho, zera o desconto fixo antes do cálculo, ignorando o input
+            // Garante que o desconto fixo é 0 se for Macho (mesmo que o campo não esteja visível)
             if (tipoAnimal === 'macho') {
                 numAnimaisDescFixo = 0;
             }
@@ -363,9 +364,10 @@
                 currency: 'BRL',
                 minimumFractionDigits: 2
             });
+            const tipo = tipoAnimal === 'macho' ? 'Macho' : 'Fêmea';
 
             resultadoDiv.innerHTML = `
-                <p>Tipo: <span style="color: ${AZUL}; font-weight: bold;">${tipoAnimal === 'macho' ? 'Macho' : 'Fêmea'}</span></p>
+                <p>Tipo: <span style="color: ${tipo === 'Macho' ? AZUL : LARANJA}; font-weight: bold;">${tipo}</span></p>
                 <p>Arrobas Líquidas: <span style="color: ${LARANJA}; font-weight: bold;">${arrobasLiquidas.toFixed(2)} @</span></p>
                 <p>Desconto Total Aplicado: <span style="color: ${LARANJA};">${descontoTotalGeral.toFixed(2)} Kg</span></p>
                 <hr style="margin: 10px 0; border-color: #ccc;">
@@ -376,7 +378,7 @@
             // --- SALVAR NA MEMÓRIA ---
             salvarCalculo({
                 data: new Date().toLocaleTimeString('pt-BR'),
-                tipo: tipoAnimal === 'macho' ? 'Macho' : 'Fêmea',
+                tipo: tipo,
                 pesoVivo: pesoTotal.toFixed(2),
                 arrobas: arrobasLiquidas.toFixed(2),
                 valor: valorAPagar 
@@ -401,7 +403,6 @@
                 historicoCalculos = JSON.parse(dadosSalvos);
                 atualizarMemoriaDisplay();
             }
-            // Chama o toggle no carregamento para configurar o display inicial
             toggleDescontoFixo(); 
         }
 
@@ -418,7 +419,6 @@
             
             memoriaVazia.style.display = 'none';
 
-            // Inverte para mostrar o cálculo mais recente no topo
             historicoCalculos.slice().reverse().forEach((item, i) => {
                 const originalIndex = historicoCalculos.length - 1 - i;
 
