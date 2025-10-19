@@ -186,18 +186,10 @@
 </head>
 <body onload="toggleDescontoFixo()">
     
-    <header class="cabecalho">
-        <h1>Meu Domínio.com.br</h1>
-        <nav class="menu-nav">
-            <ul>
-                <li><a href="index.html#inicio">Início</a></li>
-                <li><a href="index.html#sobre">Sobre</a></li>
-                <li><a href="index.html#servicos">Serviços</a></li>
-                <li><a href="index.html#links-uteis">Links Úteis</a></li> 
-                <li><a href="calculo-boi-venda.html">Cálculo Boi</a></li> 
-                <li><a href="index.html#contato">Contato</a></li>
-            </ul>
-        </nav>
+    <!-- CABEÇALHO SIMPLIFICADO -->
+    <header class="cabecalho cabecalho-simples">
+        <h1>Nexo Hub | Cálculo Boi</h1>
+        <a href="index.html" style="color: white; text-decoration: underline; font-size: 0.9rem; margin-top: 5px;">Voltar ao Início</a>
     </header>
 
     <main class="conteudo-principal">
@@ -220,12 +212,23 @@
                     <input type="number" id="preco-arroba" placeholder="Ex: 290.00">
                 </div>
                 
-                <!-- NOVO CAMPO: QUANTIDADE DE ANIMAIS -->
+                <!-- CAMPO 2: QUANTIDADE DE ANIMAIS (AGORA SELECT/LISTBOX) -->
                 <div class="input-group">
                     <label for="quantidade-animais">2. Quantidade de Animais no Lote:</label>
-                    <input type="number" id="quantidade-animais" placeholder="Ex: 15" min="1">
+                    <select id="quantidade-animais">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
                 </div>
-                <!-- FIM DO NOVO CAMPO -->
+                <!-- FIM DO CAMPO 2 -->
 
                 <div class="input-group">
                     <label for="peso-total">3. Peso Vivo Total do Lote (Kg):</label>
@@ -237,7 +240,7 @@
                     <input type="number" id="desconto-por-arroba" placeholder="Ex: 0.7">
                 </div>
                 
-                <!-- CONTAINER QUE SERÁ ESCONDIDO/EXIBIDO -->
+                <!-- CONTAINER QUE SERÁ ESCONDIDO/EXIBIDO (TARE) -->
                 <div class="input-group" id="desconto-fixo-container">
                     <label for="animais-desconto-fixo">5. Número de Animais com Desconto Fixo de 7,5 Kg (Tare):</label>
                     <input type="number" id="animais-desconto-fixo" placeholder="Ex: 7" >
@@ -276,7 +279,7 @@
 
     <footer class="rodape">
         <div class="rodape-conteudo">
-            <p>&copy; 2024 Meu Domínio. Todos os direitos reservados.</p>
+            <p>&copy; 2024 Nexo Hub. Todos os direitos reservados.</p>
         </div>
     </footer>
 
@@ -316,7 +319,8 @@
         function calcularVenda() {
             const precoArroba = parseFloat(document.getElementById('preco-arroba').value);
             const pesoTotal = parseFloat(document.getElementById('peso-total').value);
-            const quantidadeAnimais = parseInt(document.getElementById('quantidade-animais').value);
+            // Lendo o valor do SELECT
+            const quantidadeAnimais = parseInt(document.getElementById('quantidade-animais').value); 
             const descPorArroba = parseFloat(document.getElementById('desconto-por-arroba').value);
             let numAnimaisDescFixo = parseInt(document.getElementById('animais-desconto-fixo').value);
             const tipoAnimal = document.getElementById('tipo-animal').value;
@@ -395,8 +399,8 @@
                 tipo: tipo,
                 quantidade: quantidadeAnimais,
                 pesoVivo: pesoTotal.toFixed(2),
-                arrobasTotais: arrobasLiquidas.toFixed(2), // Salva o total
-                arrobasAnimal: arrobasPorAnimal.toFixed(2), // Salva por animal
+                arrobasTotais: arrobasLiquidas.toFixed(2), 
+                arrobasAnimal: arrobasPorAnimal.toFixed(2), 
                 valor: valorAPagar 
             });
         }
@@ -404,6 +408,7 @@
 
         function limparFormulario() {
             document.getElementById('peso-total').value = ''; 
+            // Listbox reinicia automaticamente para o primeiro valor ('1')
             document.getElementById('quantidade-animais').value = 1; 
             document.getElementById('resultado-venda-calculo').innerHTML = '<p>Resultado:</p><p class="valor-final">R$ 0,00</p>';
         }
