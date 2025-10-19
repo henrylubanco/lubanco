@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Venda de Boi - [Seu Nome]</title>
     
+    <!-- Link para o mesmo arquivo CSS para manter o estilo (style.css) -->
     <link rel="stylesheet" href="style.css">
 
+    <!-- CSS Adicional (dentro do HTML para estilizar a calculadora e a memória) -->
     <style>
         /* Define as variáveis de cores para usar no style local */
         :root {
@@ -58,15 +60,40 @@
             border-bottom: 1px dashed #ddd;
             padding: 10px 0;
             font-size: 0.95rem;
+            position: relative; 
+        }
+        
+        .historico li:last-child {
+            border-bottom: none;
         }
 
         .historico li strong {
             display: block;
             color: var(--laranja-destaque);
             font-size: 1.1rem;
+            padding-right: 25px;
         }
 
-        /* Estilos dos campos de input e resultados */
+        /* Botão de exclusão individual */
+        .btn-remover {
+            position: absolute;
+            top: 10px;
+            right: 0;
+            background: #dc3545; 
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 3px 6px;
+            font-size: 0.75rem;
+            line-height: 1;
+            transition: background 0.2s;
+        }
+        .btn-remover:hover {
+            background: #c82333;
+        }
+
+        /* Estilos dos campos de input e resultados (mantidos) */
         .input-group {
             margin-bottom: 20px;
         }
@@ -76,7 +103,7 @@
             font-weight: bold;
             color: var(--azul-primario);
         }
-        .input-group input {
+        .input-group input, .input-group select { /* Adicionado 'select' */
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -157,7 +184,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="toggleDescontoFixo()">
     
     <header class="cabecalho">
         <h1>Meu Domínio.com.br</h1>
@@ -181,6 +208,14 @@
                 <p>Estime o valor final considerando o **rendimento de carcaça de 50%** e descontos por quilo.</p>
 
                 <div class="input-group">
+                    <label for="tipo-animal">0. Tipo de Animal:</label>
+                    <select id="tipo-animal" onchange="toggleDescontoFixo()">
+                        <option value="macho">Macho (Boi/Novilho)</option>
+                        <option value="femea">Fêmea (Vaca/Novilha)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
                     <label for="preco-arroba">1. Preço Atual por Arroba (R$):</label>
                     <input type="number" id="preco-arroba" placeholder="Ex: 290.00" value="290">
                 </div>
@@ -195,8 +230,9 @@
                     <input type="number" id="desconto-por-arroba" placeholder="Ex: 1.5 (quilos)" value="1.5">
                 </div>
                 
-                <div class="input-group">
-                    <label for="animais-desconto-fixo">4. Número de Animais com Desconto Fixo de 7,5 Kg:</label>
+                <!-- CONTAINER QUE SERÁ ESCONDIDO PARA MACHO -->
+                <div class="input-group" id="desconto-fixo-container">
+                    <label for="animais-desconto-fixo">4. Número de Animais com Desconto Fixo de 7,5 Kg (Tare):</label>
                     <input type="number" id="animais-desconto-fixo" placeholder="Ex: 10" value="10">
                 </div>
                 
@@ -215,12 +251,16 @@
                 <h3>Memória de Cálculos</h3>
                 <p id="memoria-vazia">Nenhum cálculo salvo ainda.</p>
                 <ul id="historico-lista" class="historico">
-                    </ul>
+                    <!-- Resultados serão injetados aqui -->
+                </ul>
                 
+                <!-- BLOCO: SOMA TOTAL (Valor Acumulado) -->
                 <div class="soma-total" id="soma-total-box">
                     <h4>Valor Total Acumulado:</h4>
                     <p class="valor-final" style="color: var(--laranja-destaque); font-size: 1.8rem;">R$ 0,00</p>
                 </div>
+                <!-- FIM DO BLOCO -->
+
                 <button onclick="limparMemoria()" class="botao-limpar-memoria">Limpar Memória</button>
             </aside>
 
@@ -246,17 +286,44 @@
         document.addEventListener('DOMContentLoaded', carregarMemoria);
 
 
+        /**
+         * FUNÇÃO QUE CONTROLA A VISIBILIDADE DO CAMPO DE DESCONTO FIXO (TARE)
+         */
+        function toggleDescontoFixo() {
+            const tipoAnimal = document.getElementById('tipo-animal').value;
+            const container = document.getElementById('desconto-fixo-container');
+            
+            if (tipoAnimal === 'macho') {
+                container.style.display = 'none';
+                // Define o valor do input como 0 se for macho para garantir que não haja desconto fixo
+                document.getElementById('animais-desconto-fixo').value = 0; 
+            } else {
+                container.style.display = 'block';
+                // Opcional: restaura para um valor padrão (10) se for fêmea, se o campo estiver vazio
+                if (document.getElementById('animais-desconto-fixo').value === '0') {
+                    document.getElementById('animais-desconto-fixo').value = 10;
+                }
+            }
+        }
+
+
         function calcularVenda() {
             const precoArroba = parseFloat(document.getElementById('preco-arroba').value);
             const pesoTotal = parseFloat(document.getElementById('peso-total').value);
             const descPorArroba = parseFloat(document.getElementById('desconto-por-arroba').value);
-            const numAnimaisDescFixo = parseInt(document.getElementById('animais-desconto-fixo').value);
+            let numAnimaisDescFixo = parseInt(document.getElementById('animais-desconto-fixo').value);
+            const tipoAnimal = document.getElementById('tipo-animal').value;
             const resultadoDiv = document.getElementById('resultado-venda-calculo');
 
             // Validação
             if (isNaN(precoArroba) || isNaN(pesoTotal) || isNaN(descPorArroba) || isNaN(numAnimaisDescFixo) || pesoTotal <= 0) {
                 resultadoDiv.innerHTML = `<p class="valor-final" style="color: red; font-size: 1.4rem;">Preencha todos os campos corretamente (Peso Total > 0).</p>`;
                 return;
+            }
+
+            // Se o animal for Macho, zera o desconto fixo antes do cálculo, ignorando o input
+            if (tipoAnimal === 'macho') {
+                numAnimaisDescFixo = 0;
             }
 
             // 1. Calcular o Peso Bruto da Carcaça (50% do peso total)
@@ -298,7 +365,7 @@
             });
 
             resultadoDiv.innerHTML = `
-                <p>Peso Bruto Carcaça (50% do Peso Vivo): <span style="color: ${LARANJA};">${pesoCarcaçaBruta.toFixed(2)} Kg</span></p>
+                <p>Tipo: <span style="color: ${AZUL}; font-weight: bold;">${tipoAnimal === 'macho' ? 'Macho' : 'Fêmea'}</span></p>
                 <p>Arrobas Líquidas: <span style="color: ${LARANJA}; font-weight: bold;">${arrobasLiquidas.toFixed(2)} @</span></p>
                 <p>Desconto Total Aplicado: <span style="color: ${LARANJA};">${descontoTotalGeral.toFixed(2)} Kg</span></p>
                 <hr style="margin: 10px 0; border-color: #ccc;">
@@ -306,9 +373,10 @@
                 <p class="valor-final" style="color: ${AZUL};">${valorFormatado}</p>
             `;
 
-            // --- SALVAR NA MEMÓRIA (Valor numérico) ---
+            // --- SALVAR NA MEMÓRIA ---
             salvarCalculo({
                 data: new Date().toLocaleTimeString('pt-BR'),
+                tipo: tipoAnimal === 'macho' ? 'Macho' : 'Fêmea',
                 pesoVivo: pesoTotal.toFixed(2),
                 arrobas: arrobasLiquidas.toFixed(2),
                 valor: valorAPagar 
@@ -333,6 +401,8 @@
                 historicoCalculos = JSON.parse(dadosSalvos);
                 atualizarMemoriaDisplay();
             }
+            // Chama o toggle no carregamento para configurar o display inicial
+            toggleDescontoFixo(); 
         }
 
         function atualizarMemoriaDisplay() {
@@ -349,18 +419,24 @@
             memoriaVazia.style.display = 'none';
 
             // Inverte para mostrar o cálculo mais recente no topo
-            historicoCalculos.slice().reverse().forEach((item, index) => {
-                // Formata o valor monetário para exibição na lista
+            historicoCalculos.slice().reverse().forEach((item, i) => {
+                const originalIndex = historicoCalculos.length - 1 - i;
+
                 const valorFormatadoLista = item.valor.toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL',
                     minimumFractionDigits: 2
                 });
+                
+                const corTipo = item.tipo === 'Macho' ? AZUL : LARANJA;
 
                 const li = document.createElement('li');
                 li.innerHTML = `
+                    <button class="btn-remover" onclick="removerCalculo(${originalIndex})">X</button>
                     <strong>${valorFormatadoLista}</strong>
-                    <p style="margin: 0; font-size: 0.85rem; color: #555;">Peso Vivo: ${item.pesoVivo} Kg | Arrobas: ${item.arrobas} @</p>
+                    <p style="margin: 0; font-size: 0.85rem;">
+                        <span style="color: ${corTipo};">${item.tipo}</span> | Peso Vivo: ${item.pesoVivo} Kg | ${item.arrobas} @
+                    </p>
                     <span style="font-size: 0.75rem; color: #777;">(${item.data})</span>
                 `;
                 lista.appendChild(li);
@@ -368,19 +444,25 @@
             
             calcularSomaTotal(); 
         }
+        
+        function removerCalculo(index) {
+            if (confirm('Deseja remover este cálculo do histórico?')) {
+                historicoCalculos.splice(index, 1); 
+                localStorage.setItem('historicoVendaBoi', JSON.stringify(historicoCalculos));
+                atualizarMemoriaDisplay();
+            }
+        }
+
 
         function calcularSomaTotal() {
-            // Soma a propriedade 'valor' (numérica) de todos os itens na memória
             const somaNumerica = historicoCalculos.reduce((total, item) => total + item.valor, 0);
 
-            // Formata o resultado final para exibição
             const somaFormatada = somaNumerica.toLocaleString('pt-BR', {
                 style: 'currency',
                 currency: 'BRL',
                 minimumFractionDigits: 2
             });
 
-            // Atualiza o display da soma total
             document.getElementById('soma-total-box').querySelector('.valor-final').innerHTML = somaFormatada;
         }
 
@@ -392,7 +474,6 @@
                 document.getElementById('memoria-vazia').style.display = 'block';
                 document.getElementById('historico-lista').innerHTML = ''; 
                 
-                // Zera a soma total no display
                 document.getElementById('soma-total-box').querySelector('.valor-final').innerHTML = 'R$ 0,00';
                 
                 alert('Memória de cálculos limpa!');
