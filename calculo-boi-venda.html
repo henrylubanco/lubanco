@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Venda de Boi - [Seu Nome]</title>
+    
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Define as variáveis de cores para usar no style local */
+        :root {
+            --azul-primario: #0056b3; 
+            --laranja-destaque: #FF8C00;
+            --branco: #FFFFFF;
+            --texto-escuro: #333333;
+        }
+
+        /* Container principal para alinhar calculadora e memória lado a lado */
+        .container-calculo {
+            display: flex;
+            gap: 30px;
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .calculadora {
+            flex: 2; /* Ocupa mais espaço */
+            padding: 30px;
+            background-color: var(--branco);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .memoria-calculo {
+            flex: 1; /* Ocupa menos espaço */
+            padding: 30px;
+            background-color: #f8f8f8; 
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+
+        .memoria-calculo h3 {
+            color: var(--azul-primario);
+            margin-top: 0;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
+        }
+
+        .historico {
+            list-style: none;
+            padding: 0;
+        }
+
+        .historico li {
+            border-bottom: 1px dashed #ddd;
+            padding: 10px 0;
+            font-size: 0.95rem;
+        }
+
+        .historico li strong {
+            display: block;
+            color: var(--laranja-destaque);
+            font-size: 1.1rem;
+        }
+
+        /* Estilos dos campos de input e resultados */
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--azul-primario);
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .resultado-venda {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #ffe8cc;
+            border: 1px solid #ffbe73;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .resultado-venda p {
+            font-size: 1.1rem;
+            color: var(--texto-escuro);
+            margin: 5px 0;
+        }
+        .resultado-venda .valor-final {
+            color: var(--azul-primario);
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* Botões */
+        .botoes-acao {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .botao-limpar-memoria {
+            background-color: #dc3545; 
+            color: var(--branco);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        .botao-limpar-memoria:hover {
+            background-color: #c82333;
+        }
+
+        .botao-calcular {
+            width: 100%;
+        }
+
+        /* Estilo para a caixa de soma total */
+        .soma-total {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-top: 2px solid var(--azul-primario);
+            background-color: #e6f7ff; 
+        }
+
+        .soma-total h4 {
+            color: var(--texto-escuro);
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+
+        /* Responsividade básica */
+        @media (max-width: 768px) {
+            .container-calculo {
+                flex-direction: column;
+            }
+            .calculadora, .memoria-calculo {
+                flex: none;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <header class="cabecalho">
+        <h1>Meu Domínio.com.br</h1>
+        <nav class="menu-nav">
+            <ul>
+                <li><a href="index.html#inicio">Início</a></li>
+                <li><a href="index.html#sobre">Sobre</a></li>
+                <li><a href="index.html#servicos">Serviços</a></li>
+                <li><a href="index.html#links-uteis">Links Úteis</a></li> 
+                <li><a href="calculo-boi-venda.html">Cálculo Boi</a></li> 
+                <li><a href="index.html#contato">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="conteudo-principal">
+        <div class="container-calculo">
+            
+            <div class="calculadora">
+                <h2>Calculadora de Valor de Venda do Boi</h2>
+                <p>Estime o valor final considerando o **rendimento de carcaça de 50%** e descontos por quilo.</p>
+
+                <div class="input-group">
+                    <label for="preco-arroba">1. Preço Atual por Arroba (R$):</label>
+                    <input type="number" id="preco-arroba" placeholder="Ex: 290.00" value="290">
+                </div>
+
+                <div class="input-group">
+                    <label for="peso-total">2. Peso Vivo Total (Kg):</label>
+                    <input type="number" id="peso-total" placeholder="Ex: 5000">
+                </div>
+
+                <div class="input-group">
+                    <label for="desconto-por-arroba">3. Desconto Padrão (Kg por arroba):</label>
+                    <input type="number" id="desconto-por-arroba" placeholder="Ex: 1.5 (quilos)" value="1.5">
+                </div>
+                
+                <div class="input-group">
+                    <label for="animais-desconto-fixo">4. Número de Animais com Desconto Fixo de 7,5 Kg:</label>
+                    <input type="number" id="animais-desconto-fixo" placeholder="Ex: 10" value="10">
+                </div>
+                
+                <div class="botoes-acao">
+                    <button onclick="calcularVenda()" class="botao botao-calcular">CALCULAR E SALVAR</button>
+                    <button onclick="limparFormulario()" class="botao" style="background-color: #6c757d;">LIMPAR FORMULÁRIO</button>
+                </div>
+
+                <div class="resultado-venda" id="resultado-venda-calculo">
+                    <p>Resultado:</p>
+                    <p class="valor-final">R$ 0,00</p>
+                </div>
+            </div>
+
+            <aside class="memoria-calculo">
+                <h3>Memória de Cálculos</h3>
+                <p id="memoria-vazia">Nenhum cálculo salvo ainda.</p>
+                <ul id="historico-lista" class="historico">
+                    </ul>
+                
+                <div class="soma-total" id="soma-total-box">
+                    <h4>Valor Total Acumulado:</h4>
+                    <p class="valor-final" style="color: var(--laranja-destaque); font-size: 1.8rem;">R$ 0,00</p>
+                </div>
+                <button onclick="limparMemoria()" class="botao-limpar-memoria">Limpar Memória</button>
+            </aside>
+
+        </div>
+    </main>
+
+    <footer class="rodape">
+        <div class="rodape-conteudo">
+            <p>&copy; 2024 Meu Domínio. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Cores do tema e constantes
+        const AZUL = '#0056b3'; 
+        const LARANJA = '#FF8C00';
+        const PESO_ARROBA = 15;
+        const RENDIMENTO_CARCACA = 0.50; 
+        const DESCONTO_FIXO_KG = 7.5;
+        
+        // Inicializa a memória de cálculos e carrega LocalStorage
+        let historicoCalculos = [];
+        document.addEventListener('DOMContentLoaded', carregarMemoria);
+
+
+        function calcularVenda() {
+            const precoArroba = parseFloat(document.getElementById('preco-arroba').value);
+            const pesoTotal = parseFloat(document.getElementById('peso-total').value);
+            const descPorArroba = parseFloat(document.getElementById('desconto-por-arroba').value);
+            const numAnimaisDescFixo = parseInt(document.getElementById('animais-desconto-fixo').value);
+            const resultadoDiv = document.getElementById('resultado-venda-calculo');
+
+            // Validação
+            if (isNaN(precoArroba) || isNaN(pesoTotal) || isNaN(descPorArroba) || isNaN(numAnimaisDescFixo) || pesoTotal <= 0) {
+                resultadoDiv.innerHTML = `<p class="valor-final" style="color: red; font-size: 1.4rem;">Preencha todos os campos corretamente (Peso Total > 0).</p>`;
+                return;
+            }
+
+            // 1. Calcular o Peso Bruto da Carcaça (50% do peso total)
+            const pesoCarcaçaBruta = pesoTotal * RENDIMENTO_CARCACA;
+            
+            // 2. Calcular Desconto Fixo Total e aplicá-lo (Prioridade 1)
+            const descFixoTotal = numAnimaisDescFixo * DESCONTO_FIXO_KG;
+            const pesoCarcaçaApósFixo = pesoCarcaçaBruta - descFixoTotal;
+
+            if (pesoCarcaçaApósFixo <= 0) {
+                 resultadoDiv.innerHTML = `<p class="valor-final" style="color: red; font-size: 1.4rem;">Peso Líquido da Carcaça é zero ou negativo após desconto fixo.</p>`;
+                 return;
+            }
+            
+            // 3. Calcular Arrobas Remanescentes (Base para o Desconto Padrão)
+            const arrobasRemanescentes = pesoCarcaçaApósFixo / PESO_ARROBA;
+            
+            // 4. Calcular Desconto Padrão (Aplicado sobre as arrobas remanescentes)
+            const descPadraoTotal = arrobasRemanescentes * descPorArroba;
+            
+            // 5. Calcular Peso Líquido Final da Carcaça
+            const pesoCarcaçaLiquido = pesoCarcaçaApósFixo - descPadraoTotal;
+
+            if (pesoCarcaçaLiquido <= 0) {
+                 resultadoDiv.innerHTML = `<p class="valor-final" style="color: red; font-size: 1.4rem;">Peso Líquido Final é zero ou negativo. Verifique os descontos.</p>`;
+                 return;
+            }
+
+            // 6. Calcular Arrobas Líquidas e Valor a Pagar
+            const arrobasLiquidas = pesoCarcaçaLiquido / PESO_ARROBA;
+            const valorAPagar = arrobasLiquidas * precoArroba;
+            const descontoTotalGeral = descFixoTotal + descPadraoTotal;
+
+            // --- EXIBIÇÃO DO RESULTADO INDIVIDUAL ---
+            const valorFormatado = valorAPagar.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2
+            });
+
+            resultadoDiv.innerHTML = `
+                <p>Peso Bruto Carcaça (50% do Peso Vivo): <span style="color: ${LARANJA};">${pesoCarcaçaBruta.toFixed(2)} Kg</span></p>
+                <p>Arrobas Líquidas: <span style="color: ${LARANJA}; font-weight: bold;">${arrobasLiquidas.toFixed(2)} @</span></p>
+                <p>Desconto Total Aplicado: <span style="color: ${LARANJA};">${descontoTotalGeral.toFixed(2)} Kg</span></p>
+                <hr style="margin: 10px 0; border-color: #ccc;">
+                <p>Valor desta pesagem:</p>
+                <p class="valor-final" style="color: ${AZUL};">${valorFormatado}</p>
+            `;
+
+            // --- SALVAR NA MEMÓRIA (Valor numérico) ---
+            salvarCalculo({
+                data: new Date().toLocaleTimeString('pt-BR'),
+                pesoVivo: pesoTotal.toFixed(2),
+                arrobas: arrobasLiquidas.toFixed(2),
+                valor: valorAPagar 
+            });
+        }
+
+
+        function limparFormulario() {
+            document.getElementById('peso-total').value = ''; 
+            document.getElementById('resultado-venda-calculo').innerHTML = '<p>Resultado:</p><p class="valor-final">R$ 0,00</p>';
+        }
+
+        function salvarCalculo(calculo) {
+            historicoCalculos.push(calculo);
+            localStorage.setItem('historicoVendaBoi', JSON.stringify(historicoCalculos));
+            atualizarMemoriaDisplay();
+        }
+        
+        function carregarMemoria() {
+            const dadosSalvos = localStorage.getItem('historicoVendaBoi');
+            if (dadosSalvos) {
+                historicoCalculos = JSON.parse(dadosSalvos);
+                atualizarMemoriaDisplay();
+            }
+        }
+
+        function atualizarMemoriaDisplay() {
+            const lista = document.getElementById('historico-lista');
+            const memoriaVazia = document.getElementById('memoria-vazia');
+            lista.innerHTML = ''; 
+
+            if (historicoCalculos.length === 0) {
+                memoriaVazia.style.display = 'block';
+                document.getElementById('soma-total-box').querySelector('.valor-final').innerHTML = 'R$ 0,00';
+                return;
+            }
+            
+            memoriaVazia.style.display = 'none';
+
+            // Inverte para mostrar o cálculo mais recente no topo
+            historicoCalculos.slice().reverse().forEach((item, index) => {
+                // Formata o valor monetário para exibição na lista
+                const valorFormatadoLista = item.valor.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                    minimumFractionDigits: 2
+                });
+
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <strong>${valorFormatadoLista}</strong>
+                    <p style="margin: 0; font-size: 0.85rem; color: #555;">Peso Vivo: ${item.pesoVivo} Kg | Arrobas: ${item.arrobas} @</p>
+                    <span style="font-size: 0.75rem; color: #777;">(${item.data})</span>
+                `;
+                lista.appendChild(li);
+            });
+            
+            calcularSomaTotal(); 
+        }
+
+        function calcularSomaTotal() {
+            // Soma a propriedade 'valor' (numérica) de todos os itens na memória
+            const somaNumerica = historicoCalculos.reduce((total, item) => total + item.valor, 0);
+
+            // Formata o resultado final para exibição
+            const somaFormatada = somaNumerica.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2
+            });
+
+            // Atualiza o display da soma total
+            document.getElementById('soma-total-box').querySelector('.valor-final').innerHTML = somaFormatada;
+        }
+
+        function limparMemoria() {
+            if (confirm('Tem certeza que deseja limpar todo o histórico de cálculos?')) {
+                historicoCalculos = [];
+                localStorage.removeItem('historicoVendaBoi');
+                
+                document.getElementById('memoria-vazia').style.display = 'block';
+                document.getElementById('historico-lista').innerHTML = ''; 
+                
+                // Zera a soma total no display
+                document.getElementById('soma-total-box').querySelector('.valor-final').innerHTML = 'R$ 0,00';
+                
+                alert('Memória de cálculos limpa!');
+            }
+        }
+    </script>
+
+</body>
+</html>
