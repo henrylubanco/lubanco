@@ -7,39 +7,66 @@
     
     <!-- Link para o arquivo CSS -->
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Estilo para o separador de categorias -->
+    <style>
+        .categoria-titulo {
+            color: var(--azul-primario);
+            font-size: 1.5rem;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--laranja-destaque);
+            padding-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
     
-    <header class="cabecalho">
-        <h1>Nexo Hub</h1>
-        <nav class="menu-nav">
-            <ul>
-                <li><a href="index.html#inicio">Início</a></li>
-                <li><a href="index.html#sobre">Sobre</a></li>
-                <li><a href="index.html#servicos">Serviços</a></li>
-                <li><a href="links-uteis.html">Links Úteis</a></li> 
-                <li><a href="calculo-boi-venda.html">Cálculo Boi</a></li> 
-                <li><a href="index.html#contato">Contato</a></li>
-            </ul>
-        </nav>
+    <!-- CABEÇALHO SIMPLIFICADO: APENAS TÍTULO E LINK DE VOLTA -->
+    <header class="cabecalho cabecalho-simples">
+        <h1>Nexo Hub | Links Úteis</h1>
+        <a href="index.html" style="color: white; text-decoration: underline; font-size: 0.9rem; margin-top: 5px;">Voltar ao Início</a>
     </header>
 
     <main class="conteudo-principal">
-        <!-- SEÇÃO MIGRADA: LINKS ÚTEIS -->
         <section id="links-uteis" class="secao">
-            <h2>Links Úteis</h2>
-            <p>Acesse rapidamente portais essenciais de serviços, finanças e utilidades públicas.</p>
+            <h2>Índice de Links Essenciais</h2>
+            <p>Acesse rapidamente portais organizados por categoria.</p>
+            
+            
+            <!-- CATEGORIA 1: PECUÁRIA (Mantenha o foco aqui, pois a calculadora está relacionada) -->
+            <h3 class="categoria-titulo">Pecuária e Saúde</h3>
             <ul class="lista-links">
-                <li><a href="https://www.fast.com" target="_blank">Fast.com (Teste de Velocidade)</a></li>
+                <li><a href="calculo-boi-venda.html">Calculadora de Venda de Boi (Interno)</a></li>
+                
+                <!-- Adicionar link simulado de mercado de boi gordo se desejar, ex: -->
+                <!-- <li><a href="https://exemplo.com/cotacao-boi" target="_blank">Cotação do Boi Gordo</a></li> -->
+            </ul>
+
+            
+            <!-- CATEGORIA 2: GOVERNAMENTAL -->
+            <h3 class="categoria-titulo">Governamental e Cidades</h3>
+            <ul class="lista-links">
+                <li><a href="https://campos.rj.gov.br/" target="_blank">Prefeitura de Campos dos Goytacazes</a></li>
+				<li><a href="https://sisab.saude.gov.br/" target="_blank">SISAB (Sistema de Informação em Saúde)</a></li>
+				<li><a href="https://suap.campos.rj.gov.br/" target="_blank">SUAP (Sistema Unificado de Administração Pública)</a></li>
+                
+                <!-- Sugestão de link adicional -->
+                <!-- <li><a href="http://www.receita.fazenda.gov.br/" target="_blank">Portal da Receita Federal</a></li> -->
+            </ul>
+            
+            
+            <!-- CATEGORIA 3: FERRAMENTAS E FINANÇAS -->
+            <h3 class="categoria-titulo">Ferramentas e Finanças</h3>
+            <ul class="lista-links">
                 <li><a href="https://www.bb.com.br/site/" target="_blank">Banco do Brasil</a></li>
                 <li><a href="https://banco.bradesco/html/classic/index.shtm" target="_blank">Banco Bradesco</a></li>
-                <li><a href="https://campos.rj.gov.br/" target="_blank">Prefeitura de Campos dos Goytacazes</a></li>
-                <li><a href="https://sisab.saude.gov.br/" target="_blank">SISAB (Sistema de Informação em Saúde)</a></li>
                 <li><a href="https://mail.google.com/" target="_blank">Gmail (E-mail Google)</a></li>
-                <li><a href="https://www.horariodebrasilia.org/" target="_blank">Horário de Brasília</a></li>
+                <li><a href="https://www.fast.com" target="_blank">Fast.com (Teste de Velocidade)</a></li>
+				<li><a href="https://www.horariodebrasilia.org/" target="_blank">Horário Oficial de Brasília</a></li>
             </ul>
+
         </section>
-        <!-- FIM DA SEÇÃO MIGRADA -->
 
     </main>
 
