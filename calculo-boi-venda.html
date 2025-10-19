@@ -172,7 +172,7 @@
         }
 
 
-        /* Responsividade básica (duplicado para garantir o funcionamento local) */
+        /* Responsividade básica */
         @media (max-width: 768px) {
             .container-calculo {
                 flex-direction: column;
@@ -217,22 +217,29 @@
 
                 <div class="input-group">
                     <label for="preco-arroba">1. Preço Atual por Arroba (R$):</label>
-                    <input type="number" id="preco-arroba" placeholder="Ex: R$ 290,00">
+                    <input type="number" id="preco-arroba" placeholder="Ex: 290.00">
                 </div>
+                
+                <!-- NOVO CAMPO: QUANTIDADE DE ANIMAIS -->
+                <div class="input-group">
+                    <label for="quantidade-animais">2. Quantidade de Animais no Lote:</label>
+                    <input type="number" id="quantidade-animais" placeholder="Ex: 15" min="1">
+                </div>
+                <!-- FIM DO NOVO CAMPO -->
 
                 <div class="input-group">
-                    <label for="peso-total">2. Peso Vivo Total (Kg):</label>
+                    <label for="peso-total">3. Peso Vivo Total do Lote (Kg):</label>
                     <input type="number" id="peso-total" placeholder="Ex: 5000">
                 </div>
 
                 <div class="input-group">
-                    <label for="desconto-por-arroba">3. Desconto Padrão (Kg por arroba):</label>
-                    <input type="number" id="desconto-por-arroba" placeholder="Ex: 0,7 (quilos)">
+                    <label for="desconto-por-arroba">4. Desconto Padrão (Kg por arroba):</label>
+                    <input type="number" id="desconto-por-arroba" placeholder="Ex: 0.7">
                 </div>
                 
                 <!-- CONTAINER QUE SERÁ ESCONDIDO/EXIBIDO -->
                 <div class="input-group" id="desconto-fixo-container">
-                    <label for="animais-desconto-fixo">4. Número de Animais com Desconto Fixo de 7,5 Kg (Tare):</label>
+                    <label for="animais-desconto-fixo">5. Número de Animais com Desconto Fixo de 7,5 Kg (Tare):</label>
                     <input type="number" id="animais-desconto-fixo" placeholder="Ex: 7" >
                 </div>
                 
@@ -296,13 +303,11 @@
             
             if (tipoAnimal === 'macho') {
                 container.style.display = 'none';
-                // Garante que o valor no input seja zero, mesmo que invisível
                 inputAnimais.value = 0; 
             } else {
                 container.style.display = 'block';
-                // Restaura o valor padrão ou o último valor digitado se for 0
-                if (inputAnimais.value === '0') {
-                    inputAnimais.value = 10;
+                if (inputAnimais.value === '0' || inputAnimais.value === '') {
+                    inputAnimais.placeholder = "Ex: 7";
                 }
             }
         }
@@ -311,23 +316,28 @@
         function calcularVenda() {
             const precoArroba = parseFloat(document.getElementById('preco-arroba').value);
             const pesoTotal = parseFloat(document.getElementById('peso-total').value);
+            const quantidadeAnimais = parseInt(document.getElementById('quantidade-animais').value);
             const descPorArroba = parseFloat(document.getElementById('desconto-por-arroba').value);
             let numAnimaisDescFixo = parseInt(document.getElementById('animais-desconto-fixo').value);
             const tipoAnimal = document.getElementById('tipo-animal').value;
             const resultadoDiv = document.getElementById('resultado-venda-calculo');
 
             // Validação
-            if (isNaN(precoArroba) || isNaN(pesoTotal) || isNaN(descPorArroba) || isNaN(numAnimaisDescFixo) || pesoTotal <= 0) {
-                resultadoDiv.innerHTML = `<p class="valor-final" style="color: red; font-size: 1.4rem;">Preencha todos os campos corretamente (Peso Total > 0).</p>`;
+            if (isNaN(precoArroba) || isNaN(pesoTotal) || isNaN(descPorArroba) || isNaN(numAnimaisDescFixo) || isNaN(quantidadeAnimais) || pesoTotal <= 0 || quantidadeAnimais <= 0) {
+                resultadoDiv.innerHTML = `<p class="valor-final" style="color: red; font-size: 1.4rem;">Preencha todos os campos corretamente (Peso e Quantidade > 0).</p>`;
                 return;
             }
-
-            // Garante que o desconto fixo é 0 se for Macho (mesmo que o campo não esteja visível)
+            if (numAnimaisDescFixo > quantidadeAnimais) {
+                 resultadoDiv.innerHTML = `<p class="valor-final" style="color: red; font-size: 1.4rem;">O número de animais com Tare não pode ser maior que a Qtd. do Lote.</p>`;
+                 return;
+            }
+            
+            // Garante que o desconto fixo é 0 se for Macho
             if (tipoAnimal === 'macho') {
                 numAnimaisDescFixo = 0;
             }
 
-            // 1. Calcular o Peso Bruto da Carcaça (50% do peso total)
+            // 1. Calcular o Peso Bruto da Carcaça (50% do peso total do lote)
             const pesoCarcaçaBruta = pesoTotal * RENDIMENTO_CARCACA;
             
             // 2. Calcular Desconto Fixo Total e aplicá-lo (Prioridade 1)
@@ -358,6 +368,10 @@
             const valorAPagar = arrobasLiquidas * precoArroba;
             const descontoTotalGeral = descFixoTotal + descPadraoTotal;
 
+            // 7. CALCULAR ARROBAS POR ANIMAL (NOVA MÉTRICA)
+            const arrobasPorAnimal = arrobasLiquidas / quantidadeAnimais;
+
+
             // --- EXIBIÇÃO DO RESULTADO INDIVIDUAL ---
             const valorFormatado = valorAPagar.toLocaleString('pt-BR', {
                 style: 'currency',
@@ -367,7 +381,7 @@
             const tipo = tipoAnimal === 'macho' ? 'Macho' : 'Fêmea';
 
             resultadoDiv.innerHTML = `
-                <p>Tipo: <span style="color: ${tipo === 'Macho' ? AZUL : LARANJA}; font-weight: bold;">${tipo}</span></p>
+                <p>Lote: <span style="color: ${AZUL}; font-weight: bold;">${quantidadeAnimais} Animais (${tipo})</span></p>
                 <p>Arrobas Líquidas: <span style="color: ${LARANJA}; font-weight: bold;">${arrobasLiquidas.toFixed(2)} @</span></p>
                 <p>Desconto Total Aplicado: <span style="color: ${LARANJA};">${descontoTotalGeral.toFixed(2)} Kg</span></p>
                 <hr style="margin: 10px 0; border-color: #ccc;">
@@ -379,8 +393,10 @@
             salvarCalculo({
                 data: new Date().toLocaleTimeString('pt-BR'),
                 tipo: tipo,
+                quantidade: quantidadeAnimais,
                 pesoVivo: pesoTotal.toFixed(2),
-                arrobas: arrobasLiquidas.toFixed(2),
+                arrobasTotais: arrobasLiquidas.toFixed(2), // Salva o total
+                arrobasAnimal: arrobasPorAnimal.toFixed(2), // Salva por animal
                 valor: valorAPagar 
             });
         }
@@ -388,6 +404,7 @@
 
         function limparFormulario() {
             document.getElementById('peso-total').value = ''; 
+            document.getElementById('quantidade-animais').value = 1; 
             document.getElementById('resultado-venda-calculo').innerHTML = '<p>Resultado:</p><p class="valor-final">R$ 0,00</p>';
         }
 
@@ -435,7 +452,10 @@
                     <button class="btn-remover" onclick="removerCalculo(${originalIndex})">X</button>
                     <strong>${valorFormatadoLista}</strong>
                     <p style="margin: 0; font-size: 0.85rem;">
-                        <span style="color: ${corTipo};">${item.tipo}</span> | Peso Vivo: ${item.pesoVivo} Kg | ${item.arrobas} @
+                        <span style="color: ${corTipo};">${item.quantidade}x ${item.tipo}</span> (Total: ${item.pesoVivo} Kg)
+                    </p>
+                    <p style="margin: 0; font-size: 0.85rem; font-weight: bold;">
+                        Total Arrobas: ${item.arrobasTotais} @ | Por Animal: ${item.arrobasAnimal} @
                     </p>
                     <span style="font-size: 0.75rem; color: #777;">(${item.data})</span>
                 `;

@@ -249,4 +249,9 @@ body {
         padding: 5px 8px;
         font-size: 0.9rem;
     }
+    
+    /* Layout da Calculadora no Celular: Empilha os elementos */
+    .container-calculo {
+        flex-direction: column;
+    }
 }

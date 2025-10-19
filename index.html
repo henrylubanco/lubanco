@@ -3,33 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Site Pessoal - Profissional e Moderno</title>
+    <title>Nexo Hub - Central de Utilidades</title>
     
     <!-- Link para o arquivo CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     
-    <header class="cabecalho">
-        <h1>Meu Domínio.com.br</h1>
-        <nav class="menu-nav">
-            <ul>
-                <li><a href="#inicio">Início</a></li>
-                <li><a href="#sobre">Sobre</a></li>
-                <li><a href="#servicos">Serviços</a></li>
-                <li><a href="#links-uteis">Links Úteis</a></li> 
-                <!-- Link para a Calculadora de Venda -->
-                <li><a href="calculo-boi-venda.html">Cálculo Boi</a></li> 
-                <li><a href="#contato">Contato</a></li>
-            </ul>
-        </nav>
+    <!-- CABEÇALHO LIMPO: SOMENTE TÍTULO -->
+    <header class="cabecalho cabecalho-simples">
+        <h1>Nexo Hub</h1>
+        <!-- Todos os links de navegação estão nas seções da página -->
     </header>
 
     <main class="conteudo-principal">
         <section id="inicio" class="secao">
-            <h2>Bem-vindo ao meu Site!</h2>
-            <p>Este é um site estático simples, hospedado gratuitamente no GitHub Pages, usando meu domínio personalizado. O design moderno prioriza a clareza e o profissionalismo.</p>
-            <a href="calculo-boi-venda.html" class="botao">Calcular Venda do Boi</a>
+            <h2>Nexo Hub: Sua Central de Conexão e Utilidade</h2>
+            <p>Este é um portal dedicado a simplificar o seu dia, oferecendo acesso rápido a cálculos, documentos e links essenciais em diversas áreas.</p>
+            <a href="calculo-boi-venda.html" class="botao">Acesse a Calculadora</a>
         </section>
 
         <section id="sobre" class="secao">
@@ -51,20 +42,22 @@
             </div>
         </section>
 
-        <!-- SEÇÃO: LINKS ÚTEIS -->
-        <section id="links-uteis" class="secao">
-            <h2>Links Úteis</h2>
-            <ul class="lista-links">
-                <li><a href="https://www.fast.com" target="_blank">Fast.com (Teste de Velocidade)</a></li>
-                <li><a href="https://www.bb.com.br/site/" target="_blank">Banco do Brasil</a></li>
-                <li><a href="https://banco.bradesco/html/classic/index.shtm" target="_blank">Banco Bradesco</a></li>
-                <li><a href="https://campos.rj.gov.br/" target="_blank">Prefeitura de Campos dos Goytacazes</a></li>
-                <li><a href="https://sisab.saude.gov.br/" target="_blank">SISAB (Sistema de Informação em Saúde)</a></li>
-                <li><a href="https://mail.google.com/" target="_blank">Gmail (E-mail Google)</a></li>
-                <li><a href="https://www.horariodebrasilia.org/" target="_blank">Horário de Brasília</a></li>
-            </ul>
+        <!-- NOVO BLOCO DE LINKS PARA A PÁGINA DEDICADA -->
+        <section class="secao">
+            <h2>Outras Utilidades</h2>
+            <p>Acesse aqui o nosso índice completo de links externos e a ferramenta de cálculo de gado.</p>
+            <div class="servicos-grid">
+                <div class="servico-item">
+                    <h3><a href="links-uteis.html">Links Essenciais</a></h3>
+                    <p>Acesso rápido a portais financeiros, governamentais e de utilidade pública.</p>
+                </div>
+                <div class="servico-item">
+                    <h3><a href="calculo-boi-venda.html">Cálculo de Gado</a></h3>
+                    <p>Calculadora avançada para estimar o valor de venda do boi por arroba.</p>
+                </div>
+            </div>
         </section>
-        <!-- FIM DA SEÇÃO -->
+        <!-- FIM NOVO BLOCO -->
 
         <section id="contato" class="secao">
             <h2>Entre em Contato</h2>
@@ -83,7 +76,7 @@
                 <a href="mailto:seu.email@seudominio.com" title="Email">Email</a>
             </div>
             
-            <p>&copy; 2024 Meu Domínio. Todos os direitos reservados.</p>
+            <p>&copy; 2024 Nexo Hub. Todos os direitos reservados.</p>
             <p>Hospedado via GitHub Pages. | <a href="#inicio" class="link-rodape">Voltar ao Topo</a></p>
         </div>
     </footer>
