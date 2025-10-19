@@ -1,4 +1,14 @@
-/* Reset Básico para melhor consistência entre navegadores */
+/* ==================================== */
+/* 1. VARIÁVEIS DE CORES E RESET */
+/* ==================================== */
+:root {
+    --azul-primario: #0056b3;     /* Azul Escuro Profissional */
+    --laranja-destaque: #FF8C00;  /* Laranja Vibrante */
+    --branco: #FFFFFF;
+    --texto-escuro: #333333;
+    --fundo-suave: #F4F4F9;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -6,27 +16,77 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     line-height: 1.6;
-    background-color: #f4f4f9;
-    color: #333;
+    background-color: var(--fundo-suave);
+    color: var(--texto-escuro);
 }
 
-/* --- Cabeçalho e Navegação --- */
+.conteudo-principal {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ==================================== */
+/* 2. ESTRUTURA E SEÇÕES */
+/* ==================================== */
+
+.secao {
+    padding: 60px 30px;
+    margin-bottom: 25px;
+    background: var(--branco);
+    border-radius: 10px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
+}
+
+.secao h2 {
+    color: var(--azul-primario);
+    font-size: 2rem;
+    margin-bottom: 25px;
+    border-bottom: 3px solid var(--laranja-destaque); /* Destaque */
+    padding-bottom: 10px;
+    font-weight: 700;
+}
+
+/* --- Botões de Ação (Laranja) --- */
+.botao {
+    display: inline-block;
+    background-color: var(--laranja-destaque); 
+    color: var(--branco);
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 50px; 
+    margin-top: 20px;
+    transition: background-color 0.3s, transform 0.2s;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.botao:hover {
+    background-color: #E67E00; /* Laranja mais escuro no hover */
+    transform: translateY(-2px); 
+}
+
+/* ==================================== */
+/* 3. CABEÇALHO E NAVEGAÇÃO */
+/* ==================================== */
 .cabecalho {
-    background-color: #333;
+    background-color: var(--azul-primario); 
     color: white;
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky; /* Mantém o cabeçalho fixo ao rolar */
+    position: sticky; 
     top: 0;
     z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); 
 }
 
 .cabecalho h1 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
 }
 
 .menu-nav ul {
@@ -35,152 +95,130 @@ body {
 }
 
 .menu-nav li a {
-    color: white;
+    color: var(--branco);
     text-decoration: none;
     padding: 0.5rem 1rem;
     display: block;
     transition: background-color 0.3s;
+    border-radius: 5px;
 }
 
 .menu-nav li a:hover {
-    background-color: #575757;
+    background-color: rgba(255, 255, 255, 0.2); 
 }
 
-/* --- Conteúdo Principal --- */
-.conteudo-principal {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.secao {
-    padding: 60px 20px;
-    margin-bottom: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.secao h2 {
-    color: #007bff;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 10px;
-}
-
-.botao {
-    display: inline-block;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    margin-top: 15px;
-    transition: background-color 0.3s;
-}
-
-.botao:hover {
-    background-color: #0056b3;
-}
+/* ==================================== */
+/* 4. SEÇÕES ESPECÍFICAS */
+/* ==================================== */
 
 /* Grid de Serviços */
 .servicos-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
+    gap: 25px;
 }
 
 .servico-item {
-    padding: 20px;
+    padding: 25px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 8px;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+.servico-item:hover {
+    border-color: var(--laranja-destaque); 
+    background-color: #fffaf0; 
 }
 
 .servico-item h3 {
-    color: #333;
+    color: var(--azul-primario);
     margin-bottom: 10px;
+    font-size: 1.3rem;
 }
 
-/* --- Estilos para a Lista de Links Úteis --- */
+
+/* --- Lista de Links Úteis --- */
 .lista-links {
-    list-style: none; /* Remove os marcadores de lista padrão */
+    list-style: none;
     padding: 0;
 }
 
 .lista-links li {
-    background-color: #f9f9f9;
-    border-left: 5px solid #007bff; /* Linha de destaque azul */
+    background-color: var(--fundo-suave);
+    border-left: 5px solid var(--laranja-destaque); /* Destaque */
     margin-bottom: 10px;
-    padding: 10px 15px;
+    padding: 12px 15px;
     transition: background-color 0.3s;
+    border-radius: 4px;
 }
 
 .lista-links li:hover {
-    background-color: #eee;
+    background-color: #ffe8cc; /* Fundo suave */
 }
 
 .lista-links li a {
     text-decoration: none;
-    color: #333;
+    color: var(--texto-escuro);
     font-weight: 500;
     display: block;
 }
 
 .lista-links li a:hover {
-    color: #007bff;
+    color: var(--azul-primario);
 }
 
-/* --- Rodapé e Links Sociais --- */
+/* ==================================== */
+/* 5. RODAPÉ E LINKS SOCIAIS */
+/* ==================================== */
 .rodape {
-    background-color: #333;
+    background-color: var(--azul-primario); 
     color: white;
     text-align: center;
-    padding: 1rem 0;
-    margin-top: 20px;
+    padding: 1.5rem 0;
     font-size: 0.9rem;
 }
 
 .rodape-conteudo {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1rem 20px;
+    padding: 0 20px;
 }
 
 .social-links {
     margin-bottom: 15px;
     padding-bottom: 15px;
-    border-bottom: 1px solid #575757; /* Linha de separação suave */
+    border-bottom: 1px solid #5798da; 
     text-align: center;
 }
 
 .social-links a {
-    color: white;
+    color: var(--laranja-destaque); /* Links em Laranja */
     text-decoration: none;
-    margin: 0 10px;
+    margin: 0 12px;
     font-weight: bold;
-    transition: color 0.3s, background-color 0.3s;
-    background-color: #575757;
-    padding: 5px 10px;
-    border-radius: 4px;
+    transition: color 0.3s;
+    padding: 5px 0;
     display: inline-block;
 }
 
 .social-links a:hover {
-    color: #007bff;
-    background-color: white;
+    color: var(--branco); /* Branco no hover */
 }
 
 .link-rodape {
-    color: #ccc;
+    color: #B0C4DE; /* Azul claro/acinzentado para links */
     text-decoration: none;
 }
 
 .link-rodape:hover {
-    color: #fff;
+    color: var(--branco);
     text-decoration: underline;
 }
 
-/* --- Responsividade (Ajustes para Telas Menores) --- */
+
+/* ==================================== */
+/* 6. RESPONSIVIDADE (MOBILE) */
+/* ==================================== */
 @media (max-width: 768px) {
     .cabecalho {
         flex-direction: column;
@@ -195,17 +233,20 @@ body {
 
     .menu-nav li {
         margin: 5px 0;
+        width: 100%;
     }
     
     .servicos-grid {
-        grid-template-columns: 1fr; /* Força uma única coluna em mobile */
+        grid-template-columns: 1fr; 
     }
-}
+    
+    .social-links {
+        padding-bottom: 10px;
+    }
 
-@media (max-width: 600px) {
     .social-links a {
         margin: 5px 5px;
         padding: 5px 8px;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
     }
 }
