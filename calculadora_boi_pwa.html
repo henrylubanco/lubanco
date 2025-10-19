@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ocnabul - Cálculo de Venda de Boi</title>
+
+    <!-- Configurações PWA (Simulação de Aplicativo) -->
+    <meta name="theme-color" content="#0056b3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://placehold.co/192x192/0056b3/ffffff?text=OCN">
+    <!-- Adicione o arquivo manifest.json se o deploy for real, mas aqui incluímos o script PWA -->
+    
+    <style>
+        /* ==================================== */
+        /* VARIÁVEIS, RESET E ESTILO GERAL */
+        /* (Fusão do style.css e estilos locais) */
+        /* ==================================== */
+        :root {
+            --azul-primario: #0056b3; 
+            --laranja-destaque: #FF8C00;
+            --branco: #FFFFFF;
+            --texto-escuro: #333333;
+            --fundo-suave: #F4F4F9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: var(--fundo-suave);
+            color: var(--texto-escuro);
+        }
+
+        .conteudo-principal {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* CABEÇALHO SIMPLIFICADO */
+        .cabecalho {
+            background-color: var(--azul-primario); 
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: sticky; 
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); 
+        }
+
+        .cabecalho h1 {
+            font-size: 1.6rem;
+            margin: 0;
+        }
+
+        /* CONTAINER DA CALCULADORA */
+        .container-calculo {
+            display: flex;
+            gap: 30px;
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .calculadora {
+            flex: 2;
+            padding: 30px;
+            background-color: var(--branco);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .memoria-calculo {
+            flex: 1;
+            padding: 30px;
+            background-color: #f8f8f8; 
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+
+        .memoria-calculo h3 {
+            color: var(--azul-primario);
+            margin-top: 0;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
+        }
+
+        /* HISTÓRICO */
+        .historico {
+            list-style: none;
+            padding: 0;
+        }
+
+        .historico li {
+            border-bottom: 1px dashed #ddd;
+            padding: 10px 0;
+            font-size: 0.95rem;
+            position: relative; 
+        }
+        
+        .historico li strong {
+            display: block;
+            color: var(--laranja-destaque);
+            font-size: 1.1rem;
+            padding-right: 25px;
+        }
+
+        /* BOTÕES DE EXCLUSÃO */
+        .btn-remover {
+            position: absolute;
+            top: 10px;
+            right: 0;
+            background: #dc3545; 
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 3px 6px;
+            font-size: 0.75rem;
+            line-height: 1;
+            transition: background 0.2s;
+        }
+        .btn-remover:hover {
+            background: #c82333;
+        }
+
+        /* INPUTS E LABELS */
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--azul-primario);
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        /* RESULTADO INDIVIDUAL */
+        .resultado-venda {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #ffe8cc;
+            border: 1px solid #ffbe73;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .resultado-venda .valor-final {
+            color: var(--azul-primario);
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* BOTÕES DE AÇÃO */
+        .botoes-acao {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .botao {
+            display: inline-block;
+            background-color: var(--laranja-destaque); 
+            color: var(--branco);
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 50px; 
+            margin-top: 20px;
+            transition: background-color 0.3s, transform 0.2s;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .botao-limpar-memoria {
+            background-color: #dc3545; 
+            color: var(--branco);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        /* SOMA TOTAL */
+        .soma-total {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-top: 2px solid var(--azul-primario);
+            background-color: #e6f7ff; 
+        }
+
+
+        /* RODAPÉ */
+        .rodape {
+            background-color: var(--azul-primario); 
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        /* RESPONSIVIDADE */
+        @media (max-width: 768px) {
+            .container-calculo {
+                flex-direction: column;
+            }
+            .calculadora, .memoria-calculo {
+                flex: none;
+                width: 100%;
+            }
+        }
+        /* Oculta o cabeçalho após a instalação como PWA (simulação) */
+        @media all and (display-mode: standalone) {
+            .cabecalho a {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body onload="toggleDescontoFixo()">
+    
+    <!-- CABEÇALHO SIMPLIFICADO -->
+    <header class="cabecalho cabecalho-simples">
+        <h1>OCNABUL | Cálculo Boi</h1>
+        <a href="index.html" style="color: white; text-decoration: underline; font-size: 0.9rem; margin-top: 5px;">Voltar ao Início</a>
+    </header>
+
+    <main class="conteudo-principal">
+        <div class="container-calculo">
+            
+            <div class="calculadora">
+                <h2>Calculadora de Valor de Venda do Boi</h2>
+                <p>Estime o valor final considerando o **rendimento de carcaça de 50%** e descontos por quilo.</p>
+
+                <div class="input-group">
+                    <label for="tipo-animal">0. Tipo de Animal:</label>
+                    <select id="tipo-animal" onchange="toggleDescontoFixo()">
+                        <option value="macho">Macho (Boi/Novilho)</option>
+                        <option value="femea">Fêmea (Vaca/Novilha)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="preco-arroba">1. Preço Atual por Arroba (R$):</label>
+                    <input type="number" id="preco-arroba" placeholder="Ex: 290.00">
+                </div>
+                
+                <div class="input-group">
+                    <label for="quantidade-animais">2. Quantidade de Animais no Lote:</label>
+                    <select id="quantidade-animais">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="peso-total">3. Peso Vivo Total do Lote (Kg):</label>
+                    <input type="number" id="peso-total" placeholder="Ex: 5000">
+                </div>
+
+                <div class="input-group">
+                    <label for="desconto-por-arroba">4. Desconto Padrão (Kg por arroba):</label>
+                    <input type="number" id="desconto-por-arroba" placeholder="Ex: 0.7">
+                </div>
+                
+                <!-- CONTAINER QUE SERÁ ESCONDIDO/EXIBIDO (TARE) -->
+                <div class="input-group" id="desconto-fixo-container">
+                    <label for="animais-desconto-fixo">5. Número de Animais com Desconto Fixo de 7,5 Kg (Tare):</label>
+                    <input type="number" id="animais-desconto-fixo" placeholder="Ex: 7" >
+                </div>
+                
+                <div class="botoes-acao">
+                    <button onclick="calcularVenda()" class="botao">CALCULAR E SALVAR</button>
+                    <button onclick="limparFormulario()" class="botao" style="background-color: #6c757d;">LIMPAR FORMULÁRIO</button>
+                </div>
+
+                <div class="resultado-venda" id="resultado-venda-calculo">
+                    <p>Resultado:</p>
+                    <p class="valor-final">R$ 0,00</p>
+                </div>
+            </div>
+
+            <aside class="memoria-calculo">
+                <h3>Memória de Cálculos</h3>
+                <p id="memoria-vazia">Nenhum cálculo salvo ainda.</p>
+                <ul id="historico-lista" class="historico">
+                    <!-- Resultados serão injetados aqui -->
+                </ul>
+                
+                <!-- BLOCO: SOMA TOTAL (Valor Acumulado) -->
+                <div class="soma-total" id="soma-total-box">
+                    <h4>Valor Total Acumulado:</h4>
+                    <p class="valor-final" style="color: var(--laranja-destaque); font-size: 1.8rem;">R$ 0,00</p>
+                </div>
+                <!-- FIM DO BLOCO -->
+
+                <button onclick="limparMemoria()" class="botao-limpar-memoria">Limpar Memória</button>
+            </aside>
+
+        </div>
+    </main>
+
+    <footer class="rodape">
+        <div class="rodape-conteudo">
+            <p>&copy; 2024 Ocnabul.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Cores do tema e constantes
+        const AZUL = '#0056b3'; 
+        const LARANJA = '#FF8C00';
+        const PESO_ARROBA = 15;
+        const RENDIMENTO_CARCACA = 0.50; 
+        const DESCONTO_FIXO_KG = 7.5;
+        
+        // Inicializa a memória de cálculos e carrega LocalStorage
+        let historicoCalculos = [];
+        document.addEventListener('DOMContentLoaded', carregarMemoria);
+
+
+        /**
+         * FUNÇÃO QUE CONTROLA A VISIBILIDADE DO CAMPO DE DESCONTO FIXO (TARE)
+         */
+        function toggleDescontoFixo() {
+            const tipoAnimal = document.getElementById('tipo-animal').value;
+            const container = document.getElementById('desconto-fixo-container');
+            const inputAnimais = document.getElementById('animais-desconto-fixo');
+            
+            if (tipoAnimal === 'macho') {
+                container.style.display = 'none';
+                inputAnimais.value = 0; 
+            } else {
+                container.style.display = 'block';
+                if (inputAnimais.value === '0' || inputAnimais.value === '') {
+                    inputAnimais.placeholder = "Ex: 7";
+                }
+            }
+        }
+
+
+        function calcularVenda() {
+            const precoArroba = parseFloat(document.getElementById('preco-arroba').value);
+            const pesoTotal = parseFloat(document.getElementById('peso-total').value);
+            const quantidadeAnimais = parseInt(document.getElementById('quantidade-animais').value);
+            const descPorArroba = parseFloat(document.getElementById('desconto-por-arroba').value);
+            let numAnimaisDescFixo = parseInt(document.getElementById('animais-desconto-fixo').value);
+            const tipoAnimal = document.getElementById('tipo-animal').value;
+            const resultadoDiv = document.getElementById('resultado-venda-calculo');
+
+            // Validação
+            if (isNaN(precoArroba) || isNaN(pesoTotal) || isNaN(descPorArroba) || isNaN(numAnimaisDescFixo) || isNaN(quantidadeAnimais) || pesoTotal <= 0 || quantidadeAnimais <= 0) {
+                resultadoDiv.innerHTML = `<p class="valor-final" style="color: red; font-size: 1.4rem;">Preencha todos os campos corretamente (Peso e Quantidade > 0).</p>`;
+                return;
+            }
+            if (numAnimaisDescFixo > quantidadeAnimais) {
+                 resultadoDiv.innerHTML = `<p class="valor-final" style="color: red; font-size: 1.4rem;">O número de animais com Tare não pode ser maior que a Qtd. do Lote.</p>`;
+                 return;
+            }
+            
+            // Garante que o desconto fixo é 0 se for Macho
+            if (tipoAnimal === 'macho') {
+                numAnimaisDescFixo = 0;
+            }
+
+            // 1. Calcular o Peso Bruto da Carcaça (50% do peso total do lote)
+            const pesoCarcaçaBruta = pesoTotal * RENDIMENTO_CARCACA;
+            
+            // 2. Calcular Desconto Fixo Total e aplicá-lo (Prioridade 1)
+            const descFixoTotal = numAnimaisDescFixo * DESCONTO_FIXO_KG;
+            const pesoCarcaçaApósFixo = pesoCarcaçaBruta - descFixoTotal;
+
+            if (pesoCarcaçaApósFixo <= 0) {
+                 resultadoDiv.innerHTML = `<p class="valor-final" style="color: red; font-size: 1.4rem;">Peso Líquido da Carcaça é zero ou negativo após desconto fixo.</p>`;
+                 return;
+            }
+            
+            // 3. Calcular Arrobas Remanescentes (Base para o Desconto Padrão)
+            const arrobasRemanescentes = pesoCarcaçaApósFixo / PESO_ARROBA;
+            
+            // 4. Calcular Desconto Padrão (Aplicado sobre as arrobas remanescentes)
+            const descPadraoTotal = arrobasRemanescentes * descPorArroba;
+            
+            // 5. Calcular Peso Líquido Final da Carcaça
+            const pesoCarcaçaLiquido = pesoCarcaçaApósFixo - descPadraoTotal;
+
+            if (pesoCarcaçaLiquido <= 0) {
+                 resultadoDiv.innerHTML = `<p class="valor-final" style="color: red; font-size: 1.4rem;">Peso Líquido Final é zero ou negativo. Verifique os descontos.</p>`;
+                 return;
+            }
+
+            // 6. Calcular Arrobas Líquidas e Valor a Pagar
+            const arrobasLiquidas = pesoCarcaçaLiquido / PESO_ARROBA;
+            const valorAPagar = arrobasLiquidas * precoArroba;
+            const descontoTotalGeral = descFixoTotal + descPadraoTotal;
+
+            // 7. CALCULAR ARROBAS POR ANIMAL (NOVA MÉTRICA)
+            const arrobasPorAnimal = arrobasLiquidas / quantidadeAnimais;
+
+
+            // --- EXIBIÇÃO DO RESULTADO INDIVIDUAL ---
+            const valorFormatado = valorAPagar.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2
+            });
+            const tipo = tipoAnimal === 'macho' ? 'Macho' : 'Fêmea';
+
+            resultadoDiv.innerHTML = `
+                <p>Lote: <span style="color: ${AZUL}; font-weight: bold;">${quantidadeAnimais} Animais (${tipo})</span></p>
+                <p>Arrobas Líquidas: <span style="color: ${LARANJA}; font-weight: bold;">${arrobasLiquidas.toFixed(2)} @</span></p>
+                <p>Desconto Total Aplicado: <span style="color: ${LARANJA};">${descontoTotalGeral.toFixed(2)} Kg</span></p>
+                <hr style="margin: 10px 0; border-color: #ccc;">
+                <p>Valor desta pesagem:</p>
+                <p class="valor-final" style="color: ${AZUL};">${valorFormatado}</p>
+            `;
+
+            // --- SALVAR NA MEMÓRIA ---
+            salvarCalculo({
+                data: new Date().toLocaleTimeString('pt-BR'),
+                tipo: tipo,
+                quantidade: quantidadeAnimais,
+                pesoVivo: pesoTotal.toFixed(2),
+                arrobasTotais: arrobasLiquidas.toFixed(2), 
+                arrobasAnimal: arrobasPorAnimal.toFixed(2), 
+                valor: valorAPagar 
+            });
+        }
+
+
+        function limparFormulario() {
+            document.getElementById('peso-total').value = ''; 
+            document.getElementById('quantidade-animais').value = 1; 
+            document.getElementById('resultado-venda-calculo').innerHTML = '<p>Resultado:</p><p class="valor-final">R$ 0,00</p>';
+        }
+
+        function salvarCalculo(calculo) {
+            historicoCalculos.push(calculo);
+            localStorage.setItem('historicoVendaBoi', JSON.stringify(historicoCalculos));
+            atualizarMemoriaDisplay();
+        }
+        
+        function carregarMemoria() {
+            const dadosSalvos = localStorage.getItem('historicoVendaBoi');
+            if (dadosSalvos) {
+                historicoCalculos = JSON.parse(dadosSalvos);
+                atualizarMemoriaDisplay();
+            }
+            toggleDescontoFixo(); 
+        }
+
+        function atualizarMemoriaDisplay() {
+            const lista = document.getElementById('historico-lista');
+            const memoriaVazia = document.getElementById('memoria-vazia');
+            lista.innerHTML = ''; 
+
+            if (historicoCalculos.length === 0) {
+                memoriaVazia.style.display = 'block';
+                document.getElementById('soma-total-box').querySelector('.valor-final').innerHTML = 'R$ 0,00';
+                return;
+            }
+            
+            memoriaVazia.style.display = 'none';
+
+            historicoCalculos.slice().reverse().forEach((item, i) => {
+                const originalIndex = historicoCalculos.length - 1 - i;
+
+                const valorFormatadoLista = item.valor.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                    minimumFractionDigits: 2
+                });
+                
+                const corTipo = item.tipo === 'Macho' ? AZUL : LARANJA;
+
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <button class="btn-remover" onclick="removerCalculo(${originalIndex})">X</button>
+                    <strong>${valorFormatadoLista}</strong>
+                    <p style="margin: 0; font-size: 0.85rem;">
+                        <span style="color: ${corTipo};">${item.quantidade}x ${item.tipo}</span> (Total: ${item.pesoVivo} Kg)
+                    </p>
+                    <p style="margin: 0; font-size: 0.85rem; font-weight: bold;">
+                        Total Arrobas: ${item.arrobasTotais} @ | Por Animal: ${item.arrobasAnimal} @
+                    </p>
+                    <span style="font-size: 0.75rem; color: #777;">(${item.data})</span>
+                `;
+                lista.appendChild(li);
+            });
+            
+            calcularSomaTotal(); 
+        }
+        
+        function removerCalculo(index) {
+            if (confirm('Deseja remover este cálculo do histórico?')) {
+                historicoCalculos.splice(index, 1); 
+                localStorage.setItem('historicoVendaBoi', JSON.stringify(historicoCalculos));
+                atualizarMemoriaDisplay();
+            }
+        }
+
+
+        function calcularSomaTotal() {
+            const somaNumerica = historicoCalculos.reduce((total, item) => total + item.valor, 0);
+
+            const somaFormatada = somaNumerica.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2
+            });
+
+            document.getElementById('soma-total-box').querySelector('.valor-final').innerHTML = somaFormatada;
+        }
+
+        function limparMemoria() {
+            if (confirm('Tem certeza que deseja limpar todo o histórico de cálculos?')) {
+                historicoCalculos = [];
+                localStorage.removeItem('historicoVendaBoi');
+                
+                document.getElementById('memoria-vazia').style.display = 'block';
+                document.getElementById('historico-lista').innerHTML = ''; 
+                
+                document.getElementById('soma-total-box').querySelector('.valor-final').innerHTML = 'R$ 0,00';
+                
+                alert('Memória de cálculos limpa!');
+            }
+        }
+    </script>
+
+</body>
+</html>
