@@ -8,6 +8,21 @@
     <link rel="stylesheet" href="style.css">
     
     <style>
+        /* Mantemos a página esticada e o rodapé sempre no final */
+        .body-interno {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .main-centralizado {
+            flex: 1;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
         .categoria-titulo {
             color: var(--primary-color, #1e3a8a);
             font-size: 1.5rem;
@@ -17,7 +32,6 @@
             padding-bottom: 5px;
         }
 
-        /* Estilos da Barra de Busca */
         .busca-container {
             margin: 20px 0;
             width: 100%;
@@ -38,7 +52,6 @@
             box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
         }
 
-        /* Ajuste simples para a lista de links */
         .lista-links {
             list-style-type: none;
             padding-left: 0;
@@ -60,14 +73,14 @@
         }
     </style>
 </head>
-<body class="dash-body">
+<body class="body-interno">
     
-    <header class="dash-header" style="background-color: #1e3a8a; padding: 20px; color: white; margin-bottom: 20px;">
+    <header style="background-color: #1e3a8a; padding: 20px; color: white; text-align: center;">
         <h1 style="margin: 0;">Nexo Hub | Links Úteis</h1>
-        <a href="index.html" style="color: #e2e8f0; text-decoration: underline; font-size: 0.9rem; margin-top: 10px; display: inline-block;">Voltar ao Início</a>
+        <a href="dashboard.html" style="color: #e2e8f0; text-decoration: underline; font-size: 0.9rem; margin-top: 10px; display: inline-block;">Voltar ao Painel</a>
     </header>
 
-    <main class="main-content" style="max-width: 800px; margin: 0 auto; padding: 0 20px;">
+    <main class="main-centralizado">
         <section id="links-uteis" class="secao">
             <h2 style="color: #0f172a;">Índice de Links Essenciais</h2>
             <p style="color: #64748b;">Acesse rapidamente portais organizados por categoria.</p>
@@ -88,7 +101,7 @@
 
             <h3 class="categoria-titulo">Pecuária e Agronegócio</h3>
             <ul class="lista-links">
-                <li><a href="calculo-boi-venda2.html">Calculadora de Venda de Boi (Interno)</a></li>
+                <li><a href="calculo-boi-venda.html">Calculadora de Venda de Boi (Interno)</a></li>
                 <li><a href="https://www.cepea.esalq.usp.br/br/indicador/boi-gordo.aspx">CEPEA - Indicador do Boi Gordo</a></li>
                 <li><a href="https://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/cotacoes/commodities/boi-gordo.htm">B3 - Cotação Futura Boi Gordo</a></li>
             </ul>
@@ -120,20 +133,15 @@
                 <li><a href="https://pdfmore.com/?lang=pt_BR">Ferramenta de PDF</a></li>
                 <li><a href="https://sisgcorp.eb.mil.br/">SisGCorp (Exército Brasileiro)</a></li>
             </ul>
-
         </section>
-
     </main>
 
-    <footer class="rodape" style="text-align: center; padding: 20px; margin-top: 40px; border-top: 1px solid #e2e8f0; color: #64748b;">
-        <div class="rodape-conteudo">
-            <p>&copy; 2026 Nexo Hub. Todos os direitos reservados.</p>
-            <p>Hospedado via GitHub Pages.</p>
-        </div>
+    <footer style="text-align: center; padding: 20px; background-color: white; border-top: 1px solid #e2e8f0; color: #64748b;">
+        <p>&copy; 2026 Nexo Hub. Todos os direitos reservados.</p>
+        <p>Hospedado via GitHub Pages.</p>
     </footer>
 
     <script>
-        // 1. LÓGICA DE BUSCA RÁPIDA
         document.getElementById('input-busca').addEventListener('input', function() {
             let termo = this.value.toLowerCase();
             let titulos = document.querySelectorAll('.categoria-titulo');
@@ -165,19 +173,16 @@
             });
         });
 
-        // 2. LÓGICA PARA ABRIR TODOS OS LINKS EM NOVA ABA AUTOMATICAMENTE
         const todosOsLinks = document.querySelectorAll('.lista-links a');
         
         todosOsLinks.forEach(function(link) {
-            // Ignora o link da calculadora interna para que ela abra na mesma aba, se preferir
             if (!link.href.includes('calculo-boi-venda.html')) {
                 link.setAttribute('target', '_blank');
                 link.setAttribute('rel', 'noopener noreferrer');
             }
         });
     </script>
+
     <script type="module" src="app.js"></script>
 </body>
 </html>
-
-
