@@ -61,39 +61,40 @@ if (loginForm) {
 }
 // --- SISTEMA DE EXPIRAÇÃO POR INATIVIDADE (1 MINUTO) ---
 let tempoInativo;
-const TEMPO_LIMITE = 60 * 1000; // 60 segundos * 1000 milissegundos = 1 minuto
+const TEMPO_LIMITE = 60 * 1000; // 60 segundos (1 minuto)
 
 function deslogarPorInatividade() {
-    // Se o tempo esgotar, fazemos o logout no Firebase
+    // 1. Removemos os "escutadores" para o mouse não resetar o tempo enquanto o aviso aparece
+    document.onmousemove = null;
+    document.onkeypress = null;
+    document.onclick = null;
+    document.onscroll = null;
+    
+    // 2. Mostra o aviso travando a tela primeiro
+    alert("Tempo limite de 1 minuto atingido! O sistema foi bloqueado por segurança.");
+    
+    // 3. Destrói a sessão no Firebase
     signOut(auth).then(() => {
-        alert("Sua sessão expirou por inatividade de 1 minuto. Por segurança, faça login novamente.");
-        window.location.href = 'index.html';
+        // 4. Usa o 'replace' em vez de 'href' para apagar o histórico da aba
+        window.location.replace('index.html');
     }).catch((error) => {
-        console.error("Erro ao encerrar sessão por inatividade:", error);
+        console.error("Erro ao encerrar sessão:", error);
     });
 }
 
 function resetarTempo() {
-    // Cancela o cronômetro anterior e começa um novo do zero
     clearTimeout(tempoInativo);
-    
-    // Só ativa o cronômetro se o usuário NÃO estiver na tela de login
     if (!isLoginPage) {
         tempoInativo = setTimeout(deslogarPorInatividade, TEMPO_LIMITE);
     }
 }
 
-// Se não estiver na tela de login, monitora qualquer ação do usuário
+// Inicia o monitoramento apenas se o usuário já estiver logado (fora do index)
 if (!isLoginPage) {
-    window.onload = resetarTempo;       // Quando a página carrega
-    document.onmousemove = resetarTempo; // Quando mexe o mouse
-    document.onkeypress = resetarTempo;  // Quando digita algo
-    document.onclick = resetarTempo;     // Quando clica
-    document.onscroll = resetarTempo;    // Quando rola a página
-    document.ontouchstart = resetarTempo;// Quando toca na tela (celular)
-}
-
-// Lógica de Logout
-if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => signOut(auth));
+    window.onload = resetarTempo;
+    document.onmousemove = resetarTempo;
+    document.onkeypress = resetarTempo;
+    document.onclick = resetarTempo;
+    document.onscroll = resetarTempo;
+    document.ontouchstart = resetarTempo;
 }
