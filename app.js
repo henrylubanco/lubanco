@@ -59,37 +59,96 @@ if (loginForm) {
             });
     });
 }
-// --- SISTEMA DE EXPIRAÇÃO POR INATIVIDADE (1 MINUTO) ---
-let tempoInativo;
-const TEMPO_LIMITE = 120 * 1000; // 60 segundos (2 minuto)
+// --- SISTEMA DE EXPIRAÇÃO POR INATIVIDADE (5 MINUTOS) COM CRONÔMETRO ---
+const TEMPO_LIMITE_SEGUNDOS = 5 * 60; // 5 minutos = 300 segundos
+let tempoRestante = TEMPO_LIMITE_SEGUNDOS;
+let intervaloCronometro;
+let elementoCronometro;
 
+// Formata o tempo para o padrão MM:SS
+function formatarTempo(segundos) {
+    const min = Math.floor(segundos / 60);
+    const seg = segundos % 60;
+    return `${min.toString().padStart(2, '0')}:${seg.toString().padStart(2, '0')}`;
+}
+
+// Cria e atualiza a caixinha do cronômetro na tela
+function atualizarTelaCronometro() {
+    // Se o elemento não existir, cria ele e injeta no HTML
+    if (!elementoCronometro) {
+        elementoCronometro = document.createElement('div');
+        elementoCronometro.id = 'inactivity-timer';
+        
+        // Estilo da caixinha flutuante no canto inferior direito
+        elementoCronometro.style.position = 'fixed';
+        elementoCronometro.style.bottom = '20px';
+        elementoCronometro.style.right = '20px';
+        elementoCronometro.style.backgroundColor = '#1e3a8a'; // Azul padrão
+        elementoCronometro.style.color = 'white';
+        elementoCronometro.style.padding = '10px 15px';
+        elementoCronometro.style.borderRadius = '8px';
+        elementoCronometro.style.fontWeight = 'bold';
+        elementoCronometro.style.boxShadow = '0 4px 6px rgba(0,0,0,0.2)';
+        elementoCronometro.style.zIndex = '9999';
+        elementoCronometro.style.transition = 'background-color 0.3s';
+        
+        document.body.appendChild(elementoCronometro);
+    }
+
+    // Atualiza o texto com o tempo restante
+    elementoCronometro.textContent = `Sessão expira em: ${formatarTempo(tempoRestante)}`;
+
+    // Se faltar 1 minuto ou menos, muda a cor para vermelho (alerta)
+    if (tempoRestante <= 60) {
+        elementoCronometro.style.backgroundColor = '#ef4444'; 
+    } else {
+        elementoCronometro.style.backgroundColor = '#1e3a8a';
+    }
+}
+
+// Função que executa o bloqueio quando o tempo zera
 function deslogarPorInatividade() {
-    // 1. Removemos os "escutadores" para o mouse não resetar o tempo enquanto o aviso aparece
-    document.onmousemove = null;
-    document.onkeypress = null;
-    document.onclick = null;
-    document.onscroll = null;
+    clearInterval(intervaloCronometro);
     
-    // 2. Mostra o aviso travando a tela primeiro
-    alert("Tempo limite de 1 minuto atingido! O sistema foi bloqueado por segurança.");
+    // Remove os escutadores para o mouse não interferir mais
+    document.removeEventListener('mousemove', resetarTempo);
+    document.removeEventListener('keypress', resetarTempo);
+    document.removeEventListener('click', resetarTempo);
+    document.removeEventListener('scroll', resetarTempo);
+    document.removeEventListener('touchstart', resetarTempo);
+
+    alert("Tempo limite de 5 minutos atingido! O sistema foi bloqueado por segurança.");
     
-    // 3. Destrói a sessão no Firebase
     signOut(auth).then(() => {
-        // 4. Usa o 'replace' em vez de 'href' para apagar o histórico da aba
         window.location.replace('index.html');
     }).catch((error) => {
         console.error("Erro ao encerrar sessão:", error);
     });
 }
 
-function resetarTempo() {
-    clearTimeout(tempoInativo);
-    if (!isLoginPage) {
-        tempoInativo = setTimeout(deslogarPorInatividade, TEMPO_LIMITE);
+// Função que roda a cada 1 segundo (Tick)
+function rodarCronometro() {
+    tempoRestante--;
+    atualizarTelaCronometro();
+
+    if (tempoRestante <= 0) {
+        deslogarPorInatividade();
     }
 }
 
-// Inicia o monitoramento usando addEventListener para NÃO dar conflito com as outras páginas
+// Função que zera o relógio para 5 minutos sempre que o usuário mexe no PC
+function resetarTempo() {
+    tempoRestante = TEMPO_LIMITE_SEGUNDOS;
+    atualizarTelaCronometro();
+    
+    clearInterval(intervaloCronometro);
+    if (!isLoginPage) {
+        // Aciona o relógio para rodar a cada 1000 milissegundos (1 segundo)
+        intervaloCronometro = setInterval(rodarCronometro, 1000); 
+    }
+}
+
+// Inicia o monitoramento inteligente
 if (!isLoginPage) {
     window.addEventListener('load', resetarTempo);
     document.addEventListener('mousemove', resetarTempo);
