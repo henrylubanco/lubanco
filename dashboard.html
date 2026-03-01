@@ -3,16 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Área Segura</title>
+    <title>Nexo Hub - Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Ajuste extra para os links dentro dos cards */
+        .card a {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--primary-color, #1e3a8a);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .card a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body class="dash-body">
+    
     <nav class="sidebar">
-        <div class="logo">MeuSistema</div>
+        <div class="logo">Nexo Hub</div>
         <ul class="nav-links">
-            <li><a href="#" class="active">Visão Geral</a></li>
-            <li><a href="#">Configurações</a></li>
-            <li><a href="#">Perfil</a></li>
+            <li><a href="dashboard.html" class="active">Visão Geral</a></li>
+            <li><a href="links-uteis.html">Links Úteis</a></li>
+            <li><a href="calculo-boi-venda.html">Calculadora de Boi</a></li>
         </ul>
         <button id="logout-btn" class="btn-secondary">Sair do Sistema</button>
     </nav>
@@ -27,15 +41,24 @@
         
         <section class="content-cards">
             <div class="card">
-                <h3>Status do Sistema</h3>
-                <p>Todos os sistemas operacionais.</p>
+                <h3>Diretório de Links</h3>
+                <p>Acesse rapidamente portais governamentais, bancos, ferramentas de TI e sistemas de saúde.</p>
+                <a href="links-uteis.html">Acessar Links &rarr;</a>
             </div>
+
+            <div class="card">
+                <h3>Cálculo de Venda</h3>
+                <p>Estime o valor final de venda do gado considerando rendimento de carcaça e descontos de arroba.</p>
+                <a href="calculo-boi-venda.html">Abrir Calculadora &rarr;</a>
+            </div>
+
             <div class="card">
                 <h3>Segurança</h3>
-                <p>Autenticação Firebase ativa.</p>
+                <p>Sistema protegido e autenticação via Firebase operando normalmente.</p>
             </div>
         </section>
     </main>
+
     <script type="module" src="app.js"></script>
 </body>
 </html>
