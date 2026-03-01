@@ -213,14 +213,14 @@
             renderizarTabela(resultados);
         }
 
-        // Inicia a tabela assim que a página carrega
-        window.onload = function() {
+      // Inicia a tabela assim que a página carrega, de forma segura
+        document.addEventListener('DOMContentLoaded', function() {
             if (typeof baseDeDadosCep !== 'undefined') {
                 renderizarTabela(baseDeDadosCep.slice(0, 50));
             } else {
-                tabelaResultados.innerHTML = `<tr><td colspan="3" class="mensagem-vazia" style="color: red;">Erro: Arquivo dados-cep.js não foi encontrado ou está formatado incorretamente.</td></tr>`;
+                tabelaResultados.innerHTML = `<tr><td colspan="3" class="mensagem-vazia" style="color: red;">Erro: Arquivo cep.js não foi encontrado ou está formatado incorretamente.</td></tr>`;
             }
-        };
+        });
 
         // Escuta a digitação
         inputCep.addEventListener('input', filtrarDados);
@@ -234,4 +234,5 @@
     <script type="module" src="app.js"></script>
 </body>
 </html>
+
 
