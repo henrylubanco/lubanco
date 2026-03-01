@@ -3,83 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ocnabul - Central de Utilidades</title>
-    
-    <!-- Link para o arquivo CSS -->
+    <title>Login - Acesso Seguro</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    
-    <!-- CABEÇALHO LIMPO: SOMENTE TÍTULO -->
-    <header class="cabecalho cabecalho-simples">
-        <h1>OCNABUL</h1>
-        <!-- Todos os links de navegação estão nas seções da página -->
-    </header>
-
-    <main class="conteudo-principal">
-        <section id="inicio" class="secao">
-            <h2>OCNABUL: Sua Central de Conexão e Utilidade</h2>
-            <p>Este é um portal dedicado a simplificar o seu dia, oferecendo acesso rápido a cálculos, documentos e links essenciais em diversas áreas.</p>
-            <a href="calculo-boi-venda.html" class="botao">Acesse a Calculadora</a>
-        </section>
-
-        <section id="sobre" class="secao">
-            <h2>Quem Sou Eu</h2>
-            <p>Sou um desenvolvedor/empreendedor que usa tecnologias gratuitas para colocar projetos no ar de forma eficiente. Minha missão é simplificar a presença digital.</p>
-        </section>
-
-        <section id="servicos" class="secao">
-            <h2>O que Faço</h2>
-            <div class="servicos-grid">
-                <div class="servico-item">
-                    <h3>Desenvolvimento Web</h3>
-                    <p>Criação de landing pages e sites estáticos responsivos e otimizados para velocidade.</p>
-                </div>
-                <div class="servico-item">
-                    <h3>Hospedagem Gratuita</h3>
-                    <p>Especialista em usar plataformas como GitHub Pages e Netlify para hospedagem sem custos.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- BLOCO DE LINKS PARA PÁGINAS DEDICADAS -->
-        <section class="secao">
-            <h2>Outras Utilidades</h2>
-            <p>Acesse aqui o nosso índice completo de links externos e a ferramenta de cálculo de gado.</p>
-            <div class="servicos-grid">
-                <div class="servico-item">
-                    <h3><a href="links-uteis.html">Links Essenciais</a></h3>
-                    <p>Acesso rápido a portais financeiros, governamentais e de utilidade pública.</p>
-                </div>
-                <div class="servico-item">
-                    <h3><a href="calculo-boi-venda.html">Cálculo de Gado</a></h3>
-                    <p>Calculadora avançada para estimar o valor de venda do boi por arroba.</p>
-                </div>
-            </div>
-        </section>
-        <!-- FIM NOVO BLOCO -->
-
-        <section id="contato" class="secao">
-            <h2>Entre em Contato</h2>
-            <p>Envie um e-mail para: meu.email@seudominio.com</p>
-            <p>Ou conecte-se pelas redes sociais no rodapé.</p>
-        </section>
-    </main>
-
-    <footer class="rodape">
-        <div class="rodape-conteudo">
-            <div class="social-links">
-                <!-- ATUALIZE COM SEUS ENDEREÇOS REAIS -->
-                <a href="#" target="_blank" title="LinkedIn">LinkedIn</a>
-                <a href="#" target="_blank" title="GitHub">GitHub</a>
-                <a href="#" target="_blank" title="Instagram">Instagram</a>
-                <a href="mailto:seu.email@seudominio.com" title="Email">Email</a>
-            </div>
+<body class="auth-body">
+    <div class="auth-container">
+        <div class="auth-card">
+            <h2>Bem-vindo de volta</h2>
+            <p class="subtitle">Insira suas credenciais para acessar o painel.</p>
             
-            <p>&copy; 2024 Ocnabul.</p>
-            <p>Hospedado via GitHub Pages. | <a href="#inicio" class="link-rodape">Voltar ao Topo</a></p>
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" required placeholder="seu@email.com">
+                </div>
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" required placeholder="••••••••">
+                </div>
+                
+                <div id="error-message" class="error-text hidden"></div>
+                
+                <button type="submit" id="login-btn" class="btn-primary">Entrar</button>
+            </form>
+            
+            <p class="auth-footer">Não tem uma conta? <a href="register.html">Criar Conta</a></p>
         </div>
-    </footer>
-
+    </div>
+    <script type="module" src="app.js"></script>
 </body>
 </html>

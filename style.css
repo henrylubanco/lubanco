@@ -1,257 +1,244 @@
-/* ==================================== */
-/* 1. VARIÁVEIS DE CORES E RESET */
-/* ==================================== */
+/* Variáveis de Cores - Paleta Profissional */
 :root {
-    --azul-primario: #0056b3;     /* Azul Escuro Profissional */
-    --laranja-destaque: #FF8C00;  /* Laranja Vibrante */
-    --branco: #FFFFFF;
-    --texto-escuro: #333333;
-    --fundo-suave: #F4F4F9;
+    --primary-color: #1e3a8a; /* Azul Marinho */
+    --primary-hover: #1e40af;
+    --bg-color: #f8fafc; /* Branco 'sujo' para fundo */
+    --card-bg: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #64748b; /* Cinza Slate */
+    --border-color: #e2e8f0;
+    --error-color: #ef4444;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
-    background-color: var(--fundo-suave);
-    color: var(--texto-escuro);
+    background-color: var(--bg-color);
+    color: var(--text-main);
 }
 
-.conteudo-principal {
-    max-width: 1200px;
-    margin: 0 auto;
+/* --- Layouts de Autenticação (Login/Registro) --- */
+.auth-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 400px;
     padding: 20px;
 }
 
-/* ==================================== */
-/* 2. ESTRUTURA E SEÇÕES */
-/* ==================================== */
-
-.secao {
-    padding: 60px 30px;
-    margin-bottom: 25px;
-    background: var(--branco);
-    border-radius: 10px; 
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
+.auth-card {
+    background: var(--card-bg);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.secao h2 {
-    color: var(--azul-primario);
-    font-size: 2rem;
-    margin-bottom: 25px;
-    border-bottom: 3px solid var(--laranja-destaque); /* Destaque */
-    padding-bottom: 10px;
-    font-weight: 700;
+.auth-card h2 {
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
 }
 
-/* --- Botões de Ação (Laranja) --- */
-.botao {
-    display: inline-block;
-    background-color: var(--laranja-destaque); 
-    color: var(--branco);
-    text-decoration: none;
-    padding: 12px 25px;
-    border-radius: 50px; 
-    margin-top: 20px;
-    transition: background-color 0.3s, transform 0.2s;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.subtitle {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
 }
 
-.botao:hover {
-    background-color: #E67E00; /* Laranja mais escuro no hover */
-    transform: translateY(-2px); 
+/* Formulários */
+.input-group {
+    margin-bottom: 1.5rem;
 }
 
-/* ==================================== */
-/* 3. CABEÇALHO E NAVEGAÇÃO */
-/* ==================================== */
-.cabecalho {
-    background-color: var(--azul-primario); 
-    color: white;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky; 
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); 
-}
-
-.cabecalho h1 {
-    font-size: 1.6rem;
-}
-
-.menu-nav ul {
-    list-style: none;
-    display: flex;
-}
-
-.menu-nav li a {
-    color: var(--branco);
-    text-decoration: none;
-    padding: 0.5rem 1rem;
+.input-group label {
     display: block;
-    transition: background-color 0.3s;
-    border-radius: 5px;
-}
-
-.menu-nav li a:hover {
-    background-color: rgba(255, 255, 255, 0.2); 
-}
-
-/* ==================================== */
-/* 4. SEÇÕES ESPECÍFICAS */
-/* ==================================== */
-
-/* Grid de Serviços */
-.servicos-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-}
-
-.servico-item {
-    padding: 25px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    transition: border-color 0.3s, background-color 0.3s;
-}
-
-.servico-item:hover {
-    border-color: var(--laranja-destaque); 
-    background-color: #fffaf0; 
-}
-
-.servico-item h3 {
-    color: var(--azul-primario);
-    margin-bottom: 10px;
-    font-size: 1.3rem;
-}
-
-
-/* --- Lista de Links Úteis --- */
-.lista-links {
-    list-style: none;
-    padding: 0;
-}
-
-.lista-links li {
-    background-color: var(--fundo-suave);
-    border-left: 5px solid var(--laranja-destaque); /* Destaque */
-    margin-bottom: 10px;
-    padding: 12px 15px;
-    transition: background-color 0.3s;
-    border-radius: 4px;
-}
-
-.lista-links li:hover {
-    background-color: #ffe8cc; /* Fundo suave */
-}
-
-.lista-links li a {
-    text-decoration: none;
-    color: var(--texto-escuro);
+    margin-bottom: 0.5rem;
     font-weight: 500;
-    display: block;
-}
-
-.lista-links li a:hover {
-    color: var(--azul-primario);
-}
-
-/* ==================================== */
-/* 5. RODAPÉ E LINKS SOCIAIS */
-/* ==================================== */
-.rodape {
-    background-color: var(--azul-primario); 
-    color: white;
-    text-align: center;
-    padding: 1.5rem 0;
     font-size: 0.9rem;
 }
 
-.rodape-conteudo {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+.input-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.social-links {
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #5798da; 
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+/* Botões */
+.btn-primary {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-primary:disabled {
+    background-color: var(--text-muted);
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+}
+
+/* Mensagens de Erro e Rodapé */
+.error-text {
+    color: var(--error-color);
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
     text-align: center;
 }
 
-.social-links a {
-    color: var(--laranja-destaque); /* Links em Laranja */
+.hidden { display: none; }
+
+.auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.auth-footer a {
+    color: var(--primary-color);
     text-decoration: none;
-    margin: 0 12px;
-    font-weight: bold;
-    transition: color 0.3s;
-    padding: 5px 0;
-    display: inline-block;
+    font-weight: 600;
 }
 
-.social-links a:hover {
-    color: var(--branco); /* Branco no hover */
+/* --- Layout do Dashboard (Mobile First) --- */
+.dash-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.link-rodape {
-    color: #B0C4DE; /* Azul claro/acinzentado para links */
+.sidebar {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.nav-links {
+    display: none; /* Esconde em mobile, mostra em desktop */
+    list-style: none;
+    gap: 1.5rem;
+}
+
+.nav-links a {
     text-decoration: none;
+    color: var(--text-muted);
+    font-weight: 500;
 }
 
-.link-rodape:hover {
-    color: var(--branco);
-    text-decoration: underline;
+.nav-links a.active, .nav-links a:hover {
+    color: var(--primary-color);
 }
 
+.main-content {
+    flex: 1;
+    padding: 2rem;
+}
 
-/* ==================================== */
-/* 6. RESPONSIVIDADE (MOBILE) */
-/* ==================================== */
-@media (max-width: 768px) {
-    .cabecalho {
-        flex-direction: column;
-        text-align: center;
-        padding: 1rem 1rem;
+.dash-header {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.content-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.card h3 {
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+/* Media Queries para Desktop */
+@media (min-width: 768px) {
+    .dash-body {
+        flex-direction: row;
     }
 
-    .menu-nav ul {
-        margin-top: 10px;
+    .sidebar {
+        width: 250px;
+        border-bottom: none;
+        border-right: 1px solid var(--border-color);
         flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
     }
 
-    .menu-nav li {
-        margin: 5px 0;
+    .nav-links {
+        display: flex;
+        flex-direction: column;
         width: 100%;
-    }
-    
-    .servicos-grid {
-        grid-template-columns: 1fr; 
-    }
-    
-    .social-links {
-        padding-bottom: 10px;
+        margin-top: 2rem;
+        margin-bottom: auto;
     }
 
-    .social-links a {
-        margin: 5px 5px;
-        padding: 5px 8px;
-        font-size: 0.9rem;
+    .content-cards {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
-    
-    /* Layout da Calculadora no Celular: Empilha os elementos */
-    .container-calculo {
-        flex-direction: column;
+
+    #logout-btn {
+        margin-top: 2rem;
+        width: 100%;
     }
 }

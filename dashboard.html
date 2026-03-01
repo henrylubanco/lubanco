@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Área Segura</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dash-body">
+    <nav class="sidebar">
+        <div class="logo">MeuSistema</div>
+        <ul class="nav-links">
+            <li><a href="#" class="active">Visão Geral</a></li>
+            <li><a href="#">Configurações</a></li>
+            <li><a href="#">Perfil</a></li>
+        </ul>
+        <button id="logout-btn" class="btn-secondary">Sair do Sistema</button>
+    </nav>
+    
+    <main class="main-content">
+        <header class="dash-header">
+            <h1>Painel de Controle</h1>
+            <div class="user-info">
+                <span id="user-email-display">Carregando...</span>
+            </div>
+        </header>
+        
+        <section class="content-cards">
+            <div class="card">
+                <h3>Status do Sistema</h3>
+                <p>Todos os sistemas operacionais.</p>
+            </div>
+            <div class="card">
+                <h3>Segurança</h3>
+                <p>Autenticação Firebase ativa.</p>
+            </div>
+        </section>
+    </main>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

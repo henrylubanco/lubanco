@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Venda de Boi - Detalhada</title>
+    
+    <style>
+        /* --- VARIÁVEIS DE CORES --- */
+        :root {
+            --azul-primario: #0056b3; 
+            --laranja-destaque: #FF8C00;
+            --branco: #FFFFFF;
+            --texto-escuro: #333333;
+        }
+
+        /* --- ESTRUTURA PRINCIPAL --- */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .cabecalho {
+            background-color: var(--azul-primario);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .cabecalho h1 { margin: 0; }
+        .cabecalho a { color: white; }
+
+        .container-calculo {
+            display: flex;
+            gap: 30px;
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        /* --- CALCULADORA (ESQUERDA) --- */
+        .calculadora {
+            flex: 2;
+            padding: 30px;
+            background-color: var(--branco);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* --- MEMÓRIA (DIREITA) --- */
+        .memoria-calculo {
+            flex: 1;
+            padding: 30px;
+            background-color: #f8f8f8; 
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+
+        .memoria-calculo h3 {
+            color: var(--azul-primario);
+            margin-top: 0;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
+        }
+
+        .historico {
+            list-style: none;
+            padding: 0;
+        }
+
+        .historico li {
+            border-bottom: 1px dashed #ddd;
+            padding: 10px 0;
+            font-size: 0.95rem;
+            position: relative; 
+        }
+        
+        .historico li:last-child { border-bottom: none; }
+
+        .historico li strong {
+            display: block;
+            color: var(--laranja-destaque);
+            font-size: 1.1rem;
+            padding-right: 25px;
+        }
+
+        /* --- BOTÕES --- */
+        .btn-remover {
+            position: absolute;
+            top: 10px;
+            right: 0;
+            background: #dc3545; 
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 3px 6px;
+            font-size: 0.75rem;
+            line-height: 1;
+            transition: background 0.2s;
+        }
+        .btn-remover:hover { background: #c82333; }
+
+        .botoes-acao {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .botao {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            width: 100%;
+        }
+
+        .botao-calcular {
+            background-color: var(--azul-primario);
+        }
+        .botao-calcular:hover { background-color: #004494; }
+        
+        .botao-limpar-memoria {
+            background-color: #dc3545; 
+            color: var(--branco);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: background-color 0.3s;
+            margin-top: 15px;
+        }
+        .botao-limpar-memoria:hover { background-color: #c82333; }
+
+        /* --- INPUTS E RESULTADOS --- */
+        .input-group { margin-bottom: 20px; }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--azul-primario);
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box; 
+        }
+
+        .resultado-venda {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #ffe8cc;
+            border: 1px solid #ffbe73;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .resultado-venda p {
+            font-size: 1.1rem;
+            color: var(--texto-escuro);
+            margin: 5px 0;
+        }
+        .resultado-venda .valor-final {
+            color: var(--azul-primario);
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* --- SOMA TOTAL --- */
+        .soma-total {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-top: 2px solid var(--azul-primario);
+            background-color: #e6f7ff; 
+        }
+        .soma-total h4 {
+            color: var(--texto-escuro);
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            margin-top: 0;
+        }
+
+        /* --- ESTILOS DO DETALHAMENTO MATEMÁTICO --- */
+        .detalhes-matematicos {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-left: 5px solid var(--azul-primario);
+            font-size: 0.9rem;
+            color: #555;
+            display: none; 
+            border-radius: 4px;
+        }
+
+        .detalhes-matematicos h3 {
+            margin-top: 0;
+            color: var(--azul-primario);
+            font-size: 1.1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        .linha-passo {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+
+        .linha-passo strong {
+            color: #333;
+        }
+
+        /* --- RODAPÉ E RESPONSIVIDADE --- */
+        .rodape {
+            text-align: center;
+            padding: 20px;
+            background: #eee;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .container-calculo { flex-direction: column; }
+            .calculadora, .memoria-calculo { flex: none; width: 100%; box-sizing: border-box; }
+        }
+    </style>
+</head>
+<body onload="toggleDescontoFixo()">
+    
+    <header class="cabecalho cabecalho-simples">
+        <h1>Nexo Hub | Cálculo Boi</h1>
+        <a href="index.html" style="color: white; text-decoration: underline; font-size: 0.9rem; margin-top: 5px;">Voltar ao Início</a>
+    </header>
+
+    <main class="conteudo-principal">
+        <div class="container-calculo">
+            
+            <div class="calculadora">
+                <h2>Calculadora de Venda</h2>
+                <p>Estime o valor final considerando o **rendimento de carcaça de 50%** e descontos por quilo.</p>
+
+                <div class="input-group">
+                    <label for="tipo-animal">0. Tipo de Animal:</label>
+                    <select id="tipo-animal" onchange="toggleDescontoFixo()">
+                        <option value="macho">Macho (Boi/Novilho)</option>
+                        <option value="femea">Fêmea (Vaca/Novilha)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="preco-arroba">1. Preço Atual por Arroba (R$):</label>
+                    <input type="number" id="preco-arroba" placeholder="Ex: 290.00">
+                </div>
+                
+                <div class="input-group">
+                    <label for="quantidade-animais">2. Quantidade de Animais no Lote:</label>
+                    <select id="quantidade-animais">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+						<option value="11">11</option>
+						<option value="12">12</option>
+						<option value="13">13</option>
+						<option value="14">14</option>
+						<option value="15">15</option>
+						<option value="16">16</option>
+						<option value="17">17</option>
+						<option value="18">18</option>
+						
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="peso-total">3. Peso Vivo Total do Lote (Kg):</label>
+                    <input type="number" id="peso-total" placeholder="Ex: 5000">
+                </div>
+
+                <div class="input-group">
+                    <label for="desconto-por-arroba">4. Desconto Padrão (Kg por arroba):</label>
+                    <input type="number" id="desconto-por-arroba" placeholder="Ex: 0.7">
+                </div>
+                
+                <div class="input-group" id="desconto-fixo-container">
+                    <label for="animais-desconto-fixo">5. Número de Animais com Desconto Fixo de 7,5 Kg (Tare):</label>
+                    <input type="number" id="animais-desconto-fixo" placeholder="Ex: 7" >
+                </div>
+                
+                <div class="botoes-acao">
+                    <button onclick="calcularVenda()" class="botao botao-calcular">CALCULAR E SALVAR</button>
+                    <button onclick="limparFormulario()" class="botao" style="background-color: #6c757d;">LIMPAR FORMULÁRIO</button>
+                </div>
+
+                <div class="resultado-venda" id="resultado-venda-calculo">
+                    <p>Resultado:</p>
+                    <p class="valor-final">R$ 0,00</p>
+                </div>
+
+                <div id="detalhes-passo-a-passo" class="detalhes-matematicos">
+                    </div>
+            </div>
+
+            <aside class="memoria-calculo">
+                <h3>Memória de Cálculos</h3>
+                <p id="memoria-vazia">Nenhum cálculo salvo ainda.</p>
+                <ul id="historico-lista" class="historico">
+                    </ul>
+                
+                <div class="soma-total" id="soma-total-box">
+                    <h4>Valor Total Acumulado:</h4>
+                    <p class="valor-final" style="color: var(--laranja-destaque); font-size: 1.8rem;">R$ 0,00</p>
+                </div>
+
+                <button onclick="limparMemoria()" class="botao-limpar-memoria">Limpar Memória</button>
+            </aside>
+
+        </div>
+    </main>
+
+    <footer class="rodape">
+        <div class="rodape-conteudo">
+            <p>&copy; 2024 Nexo Hub. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- CONSTANTES ---
+        const AZUL = '#0056b3'; 
+        const LARANJA = '#FF8C00';
+        const PESO_ARROBA = 15;
+        const RENDIMENTO_CARCACA = 0.50; 
+        const DESCONTO_FIXO_KG = 7.5;
+        
+        let historicoCalculos = [];
+        
+        // --- INICIALIZAÇÃO ---
+        document.addEventListener('DOMContentLoaded', carregarMemoria);
+
+        // --- FUNÇÕES DE INTERFACE ---
+        
+        function toggleDescontoFixo() {
+            const tipoAnimal = document.getElementById('tipo-animal').value;
+            const container = document.getElementById('desconto-fixo-container');
+            const inputAnimais = document.getElementById('animais-desconto-fixo');
+            
+            if (tipoAnimal === 'macho') {
+                container.style.display = 'none';
+                inputAnimais.value = 0; 
+            } else {
+                container.style.display = 'block';
+                if (inputAnimais.value === '0' || inputAnimais.value === '') {
+                    inputAnimais.placeholder = "Ex: 7";
+                }
+            }
+        }
+
+        function limparFormulario() {
+            // Limpa todos os campos de entrada
+            document.getElementById('tipo-animal').value = 'macho';
+            document.getElementById('preco-arroba').value = '';
+            document.getElementById('quantidade-animais').value = 1;
+            document.getElementById('peso-total').value = ''; 
+            document.getElementById('desconto-por-arroba').value = '';
+            document.getElementById('animais-desconto-fixo').value = '';
+            
+            // Garante que a UI do Tare corresponda ao 'Macho' (escondido)
+            toggleDescontoFixo();
+
+            // Reseta resultado e esconde detalhes
+            document.getElementById('resultado-venda-calculo').innerHTML = '<p>Resultado:</p><p class="valor-final">R$ 0,00</p>';
+            document.getElementById('detalhes-passo-a-passo').style.display = 'none';
+        }
+
+        // --- LÓGICA DE CÁLCULO PRINCIPAL ---
+        function calcularVenda() {
+            const precoArroba = parseFloat(document.getElementById('preco-arroba').value);
+            const pesoTotal = parseFloat(document.getElementById('peso-total').value);
+            const quantidadeAnimais = parseInt(document.getElementById('quantidade-animais').value); 
+            const descPorArroba = parseFloat(document.getElementById('desconto-por-arroba').value);
+            let numAnimaisDescFixo = parseInt(document.getElementById('animais-desconto-fixo').value);
+            const tipoAnimal = document.getElementById('tipo-animal').value;
+            
+            const resultadoDiv = document.getElementById('resultado-venda-calculo');
+            const detalhesDiv = document.getElementById('detalhes-passo-a-passo');
+
+            // Validação
+            if (isNaN(precoArroba) || isNaN(pesoTotal) || isNaN(descPorArroba) || isNaN(numAnimaisDescFixo) || isNaN(quantidadeAnimais) || pesoTotal <= 0 || quantidadeAnimais <= 0) {
+                resultadoDiv.innerHTML = `<p class="valor-final" style="color: red; font-size: 1.4rem;">Preencha todos os campos corretamente (Peso e Quantidade > 0).</p>`;
+                detalhesDiv.style.display = 'none';
+                return;
+            }
+            if (numAnimaisDescFixo > quantidadeAnimais) {
+                 resultadoDiv.innerHTML = `<p class="valor-final" style="color: red; font-size: 1.4rem;">Erro: Número de animais com Tare maior que a Qtd. do Lote.</p>`;
+                 detalhesDiv.style.display = 'none';
+                 return;
+            }
+            
+            // Garante que o desconto fixo é 0 se for Macho
+            if (tipoAnimal === 'macho') {
+                numAnimaisDescFixo = 0;
+            }
+
+            // 1. Peso Bruto da Carcaça (50% do peso total)
+            const pesoCarcaçaBruta = pesoTotal * RENDIMENTO_CARCACA;
+            
+            // 2. Desconto Fixo Total (Tare)
+            const descFixoTotal = numAnimaisDescFixo * DESCONTO_FIXO_KG;
+            const pesoCarcaçaApósFixo = pesoCarcaçaBruta - descFixoTotal;
+
+            if (pesoCarcaçaApósFixo <= 0) {
+                 resultadoDiv.innerHTML = `<p class="valor-final" style="color: red; font-size: 1.4rem;">Peso Líquido zerado ou negativo após desconto fixo.</p>`;
+                 detalhesDiv.style.display = 'none';
+                 return;
+            }
+            
+            // 3. Calcular Arrobas Remanescentes (Base para o Desconto Padrão)
+            const arrobasRemanescentes = pesoCarcaçaApósFixo / PESO_ARROBA;
+            
+            // 4. Calcular Desconto Padrão
+            const descPadraoTotal = arrobasRemanescentes * descPorArroba;
+            
+            // 5. Calcular Peso Líquido Final da Carcaça
+            const pesoCarcaçaLiquido = pesoCarcaçaApósFixo - descPadraoTotal;
+
+            if (pesoCarcaçaLiquido <= 0) {
+                 resultadoDiv.innerHTML = `<p class="valor-final" style="color: red; font-size: 1.4rem;">Peso Líquido Final é zero ou negativo.</p>`;
+                 detalhesDiv.style.display = 'none';
+                 return;
+            }
+
+            // 6. Calcular Arrobas Líquidas e Valor a Pagar
+            const arrobasLiquidas = pesoCarcaçaLiquido / PESO_ARROBA;
+            const valorAPagar = arrobasLiquidas * precoArroba;
+            const descontoTotalGeral = descFixoTotal + descPadraoTotal;
+            const arrobasPorAnimal = arrobasLiquidas / quantidadeAnimais;
+
+            // --- EXIBIÇÃO DO RESULTADO RESUMIDO ---
+            const valorFormatado = valorAPagar.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2
+            });
+            const tipo = tipoAnimal === 'macho' ? 'Macho' : 'Fêmea';
+
+            resultadoDiv.innerHTML = `
+                <p>Lote: <span style="color: ${AZUL}; font-weight: bold;">${quantidadeAnimais} Animais (${tipo})</span></p>
+                <p>Arrobas Líquidas: <span style="color: ${LARANJA}; font-weight: bold;">${arrobasLiquidas.toFixed(2)} @</span></p>
+                <p>Desconto Total Aplicado: <span style="color: ${LARANJA};">${descontoTotalGeral.toFixed(2)} Kg</span></p>
+                <hr style="margin: 10px 0; border-color: #ccc;">
+                <p>Valor desta pesagem:</p>
+                <p class="valor-final" style="color: ${AZUL};">${valorFormatado}</p>
+            `;
+
+            // --- EXIBIÇÃO DO RESULTADO DETALHADO (PASSO A PASSO) ---
+            detalhesDiv.style.display = 'block';
+            detalhesDiv.innerHTML = `
+                <h3>Memória de Cálculo (Passo a Passo)</h3>
+                
+                <div class="linha-passo">
+                    1. <strong>Peso Carcaça Bruta (50%):</strong><br>
+                    ${pesoTotal} kg x 0.50 = <strong>${pesoCarcaçaBruta.toFixed(2)} kg</strong>
+                </div>
+
+                <div class="linha-passo">
+                    2. <strong>Desconto Fixo (Tare):</strong><br>
+                    ${numAnimaisDescFixo} animais x ${DESCONTO_FIXO_KG} kg = <strong style="color: red;">- ${descFixoTotal.toFixed(2)} kg</strong>
+                    <br><small>(Peso após Tare: ${pesoCarcaçaApósFixo.toFixed(2)} kg)</small>
+                </div>
+
+                <div class="linha-passo">
+                    3. <strong>Desconto Padrão (${descPorArroba} kg/@):</strong><br>
+                    Base: ${arrobasRemanescentes.toFixed(2)} @ x ${descPorArroba} kg = <strong style="color: red;">- ${descPadraoTotal.toFixed(2)} kg</strong>
+                </div>
+
+                <div class="linha-passo">
+                    4. <strong>Peso Líquido Final:</strong><br>
+                    ${pesoCarcaçaApósFixo.toFixed(2)} kg - ${descPadraoTotal.toFixed(2)} kg = <strong>${pesoCarcaçaLiquido.toFixed(2)} kg</strong>
+                </div>
+
+                <div class="linha-passo">
+                    5. <strong>Conversão Final:</strong><br>
+                    ${pesoCarcaçaLiquido.toFixed(2)} kg ÷ 15 = <strong>${arrobasLiquidas.toFixed(2)} @</strong>
+                </div>
+
+                <div class="linha-passo" style="border:none;">
+                    6. <strong>Cálculo Financeiro:</strong><br>
+                    ${arrobasLiquidas.toFixed(2)} @ x R$ ${precoArroba.toFixed(2)} = <strong>${valorFormatado}</strong>
+                </div>
+            `;
+
+            // --- SALVAR NA MEMÓRIA ---
+            salvarCalculo({
+                data: new Date().toLocaleTimeString('pt-BR'),
+                tipo: tipo,
+                quantidade: quantidadeAnimais,
+                pesoVivo: pesoTotal.toFixed(2),
+                arrobasTotais: arrobasLiquidas.toFixed(2), 
+                arrobasAnimal: arrobasPorAnimal.toFixed(2), 
+                valor: valorAPagar 
+            });
+        }
+
+        // --- SISTEMA DE MEMÓRIA (LOCALSTORAGE) ---
+        
+        function salvarCalculo(calculo) {
+            historicoCalculos.push(calculo);
+            localStorage.setItem('historicoVendaBoi', JSON.stringify(historicoCalculos));
+            atualizarMemoriaDisplay();
+        }
+        
+        function carregarMemoria() {
+            const dadosSalvos = localStorage.getItem('historicoVendaBoi');
+            if (dadosSalvos) {
+                historicoCalculos = JSON.parse(dadosSalvos);
+                atualizarMemoriaDisplay();
+            }
+            toggleDescontoFixo(); 
+        }
+
+        function atualizarMemoriaDisplay() {
+            const lista = document.getElementById('historico-lista');
+            const memoriaVazia = document.getElementById('memoria-vazia');
+            lista.innerHTML = ''; 
+
+            if (historicoCalculos.length === 0) {
+                memoriaVazia.style.display = 'block';
+                document.getElementById('soma-total-box').querySelector('.valor-final').innerHTML = 'R$ 0,00';
+                return;
+            }
+            
+            memoriaVazia.style.display = 'none';
+
+            historicoCalculos.slice().reverse().forEach((item, i) => {
+                const originalIndex = historicoCalculos.length - 1 - i;
+                const valorFormatadoLista = item.valor.toLocaleString('pt-BR', {
+                    style: 'currency', currency: 'BRL', minimumFractionDigits: 2
+                });
+                const corTipo = item.tipo === 'Macho' ? AZUL : LARANJA;
+
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <button class="btn-remover" onclick="removerCalculo(${originalIndex})">X</button>
+                    <strong>${valorFormatadoLista}</strong>
+                    <p style="margin: 0; font-size: 0.85rem;">
+                        <span style="color: ${corTipo};">${item.quantidade}x ${item.tipo}</span> (Total: ${item.pesoVivo} Kg)
+                    </p>
+                    <p style="margin: 0; font-size: 0.85rem; font-weight: bold;">
+                        Total Arrobas: ${item.arrobasTotais} @ | Por Animal: ${item.arrobasAnimal} @
+                    </p>
+                    <span style="font-size: 0.75rem; color: #777;">(${item.data})</span>
+                `;
+                lista.appendChild(li);
+            });
+            
+            calcularSomaTotal(); 
+        }
+        
+        function removerCalculo(index) {
+            if (confirm('Deseja remover este cálculo do histórico?')) {
+                historicoCalculos.splice(index, 1); 
+                localStorage.setItem('historicoVendaBoi', JSON.stringify(historicoCalculos));
+                atualizarMemoriaDisplay();
+            }
+        }
+
+        function calcularSomaTotal() {
+            const somaNumerica = historicoCalculos.reduce((total, item) => total + item.valor, 0);
+            const somaFormatada = somaNumerica.toLocaleString('pt-BR', {
+                style: 'currency', currency: 'BRL', minimumFractionDigits: 2
+            });
+            document.getElementById('soma-total-box').querySelector('.valor-final').innerHTML = somaFormatada;
+        }
+
+        function limparMemoria() {
+            if (confirm('Tem certeza que deseja limpar todo o histórico de cálculos?')) {
+                historicoCalculos = [];
+                localStorage.removeItem('historicoVendaBoi');
+                
+                document.getElementById('memoria-vazia').style.display = 'block';
+                document.getElementById('historico-lista').innerHTML = ''; 
+                document.getElementById('soma-total-box').querySelector('.valor-final').innerHTML = 'R$ 0,00';
+                
+                alert('Memória de cálculos limpa!');
+            }
+        }
+    </script>
+
+</body>
+</html>
