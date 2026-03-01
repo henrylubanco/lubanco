@@ -1,4 +1,179 @@
 const baseDeDadosCep =[
+ {
+    "CEP": "28140-974",
+    "BAIRRO/LOCALIDADE": "Campo Limpo",
+    "RUA": "Estrada do Açúcar"
+  },
+  {
+    "CEP": "28073-400",
+    "BAIRRO/LOCALIDADE": "Custodópolis",
+    "RUA": "Estrada Nogueira"
+  },
+  {
+    "CEP": "28115-000",
+    "BAIRRO/LOCALIDADE": "Dores de Macabu",
+    "RUA": "Dores de Macabu"
+  },
+  {
+    "CEP": "28110-000",
+    "BAIRRO/LOCALIDADE": "Goitacazes",
+    "RUA": "Goitacazes"
+  },
+  {
+    "CEP": "28120-000",
+    "BAIRRO/LOCALIDADE": "Ibitioca",
+    "RUA": "Ibitioca"
+  },
+  {
+    "CEP": "28120-971",
+    "BAIRRO/LOCALIDADE": "Lagoa de Cima",
+    "RUA": "Estrada Lagoa de Cima"
+  },
+  {
+    "CEP": "28125-000",
+    "BAIRRO/LOCALIDADE": "Morangaba",
+    "RUA": "Morangaba"
+  },
+  {
+    "CEP": "28178-000",
+    "BAIRRO/LOCALIDADE": "Morro do Côco",
+    "RUA": "Morro do Côco"
+  },
+  {
+    "CEP": "28143-000",
+    "BAIRRO/LOCALIDADE": "Mussurepe",
+    "RUA": "Mussurepe"
+  },
+  {
+    "CEP": "28093-000",
+    "BAIRRO/LOCALIDADE": "Parque Aeroporto",
+    "RUA": "Estrada Brejo Grande"
+  },
+  {
+    "CEP": "28025-490",
+    "BAIRRO/LOCALIDADE": "Parque Aurora",
+    "RUA": "Estrada do Capão"
+  },
+  {
+    "CEP": "28025-820",
+    "BAIRRO/LOCALIDADE": "Parque Aurora",
+    "RUA": "Estrada Mata da Canoa"
+  },
+  {
+    "CEP": "28026-450",
+    "BAIRRO/LOCALIDADE": "Parque Aurora",
+    "RUA": "Estrada Carvão"
+  },
+  {
+    "CEP": "28020-400",
+    "BAIRRO/LOCALIDADE": "Parque Jóquei Club",
+    "RUA": "Estrada do Goiabal"
+  },
+  {
+    "CEP": "28021-455",
+    "BAIRRO/LOCALIDADE": "Parque Penha",
+    "RUA": "Estrada Cambaiba"
+  },
+  {
+    "CEP": "28022-560",
+    "BAIRRO/LOCALIDADE": "Parque Penha",
+    "RUA": "Estrada do Açúcar"
+  },
+  {
+    "CEP": "28083-700",
+    "BAIRRO/LOCALIDADE": "Parque Santa Clara",
+    "RUA": "Estrada Taquarucu"
+  },
+  {
+    "CEP": "28085-500",
+    "BAIRRO/LOCALIDADE": "Parque Santa Clara",
+    "RUA": "Estrada Santa Rosa"
+  },
+  {
+    "CEP": "28085-515",
+    "BAIRRO/LOCALIDADE": "Parque Santa Rosa",
+    "RUA": "Estrada Taquarucu"
+  },
+  {
+    "CEP": "28093-500",
+    "BAIRRO/LOCALIDADE": "Parque Santos Dumont",
+    "RUA": "Estrada do Coqueiro"
+  },
+  {
+    "CEP": "28026-495",
+    "BAIRRO/LOCALIDADE": "Parque São Benedito",
+    "RUA": "Estrada do Capão"
+  },
+  {
+    "CEP": "28030-415",
+    "BAIRRO/LOCALIDADE": "Parque São Caetano",
+    "RUA": "Estrada Silvio Bastos Tavares"
+  },
+  {
+    "CEP": "28155-000",
+    "BAIRRO/LOCALIDADE": "Santa Maria",
+    "RUA": "Santa Maria"
+  },
+  {
+    "CEP": "28140-000",
+    "BAIRRO/LOCALIDADE": "Santo Amaro de Campos",
+    "RUA": "Santo Amaro de Campos"
+  },
+  {
+    "CEP": "28160-000",
+    "BAIRRO/LOCALIDADE": "Santo Eduardo",
+    "RUA": "Santo Eduardo"
+  },
+  {
+    "CEP": "28145-000",
+    "BAIRRO/LOCALIDADE": "São Sebastião de Campos",
+    "RUA": "São Sebastião de Campos"
+  },
+  {
+    "CEP": "28118-000",
+    "BAIRRO/LOCALIDADE": "Serrinha",
+    "RUA": "Serrinha"
+  },
+  {
+    "CEP": "28040-590",
+    "BAIRRO/LOCALIDADE": "Tapera",
+    "RUA": "Estrada São Benedito"
+  },
+  {
+    "CEP": "28148-000",
+    "BAIRRO/LOCALIDADE": "Tocos",
+    "RUA": "Tocos"
+  },
+  {
+    "CEP": "28175-000",
+    "BAIRRO/LOCALIDADE": "Travessão",
+    "RUA": "Travessão"
+  },
+  {
+    "CEP": "28040-280",
+    "BAIRRO/LOCALIDADE": "Ururaí",
+    "RUA": "Estrada Araçá"
+  },
+  {
+    "CEP": "28040-375",
+    "BAIRRO/LOCALIDADE": "Ururaí",
+    "RUA": "Estrada da Raia"
+  },
+  {
+    "CEP": "28040-600",
+    "BAIRRO/LOCALIDADE": "Ururaí",
+    "RUA": "Estrada Margem da Linha"
+  },
+  {
+    "CEP": "28165-000",
+    "BAIRRO/LOCALIDADE": "Vila Nova de Campos",
+    "RUA": "Vila Nova de Campos"
+  },
+  {
+    "CEP": "28175-992",
+    "BAIRRO/LOCALIDADE": "Estrada Santa Ana",
+    "RUA": "Estrada Santa Ana"
+  },
   {
     "CEP": "28025-551",
     "BAIRRO/LOCALIDADE": "Alpha Green",
