@@ -2,14 +2,15 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-// === ATENÇÃO: COLOQUE AS SUAS CHAVES DO FIREBASE AQUI ===
+// SUBSTITUA ESTE OBJETO pelas chaves do seu projeto Firebase
 const firebaseConfig = {
-    apiKey: "SUA_API_KEY",
-    authDomain: "seu-projeto.firebaseapp.com",
-    projectId: "seu-projeto",
-    storageBucket: "seu-projeto.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abcdef"
+  apiKey: "AIzaSyC0lD7CAGlDVFwqjHgnR7fUjAUOOy0xEIM",
+  authDomain: "ocnabul-95e31.firebaseapp.com",
+  projectId: "ocnabul-95e31",
+  storageBucket: "ocnabul-95e31.firebasestorage.app",
+  messagingSenderId: "871051377346",
+  appId: "1:871051377346:web:24286efac346fd6f4d195b",
+  measurementId: "G-L4VDMCVRX0"
 };
 
 const app = initializeApp(firebaseConfig);
