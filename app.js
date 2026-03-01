@@ -89,12 +89,12 @@ function resetarTempo() {
     }
 }
 
-// Inicia o monitoramento apenas se o usuário já estiver logado (fora do index)
+// Inicia o monitoramento usando addEventListener para NÃO dar conflito com as outras páginas
 if (!isLoginPage) {
-    window.onload = resetarTempo;
-    document.onmousemove = resetarTempo;
-    document.onkeypress = resetarTempo;
-    document.onclick = resetarTempo;
-    document.onscroll = resetarTempo;
-    document.ontouchstart = resetarTempo;
+    window.addEventListener('load', resetarTempo);
+    document.addEventListener('mousemove', resetarTempo);
+    document.addEventListener('keypress', resetarTempo);
+    document.addEventListener('click', resetarTempo);
+    document.addEventListener('scroll', resetarTempo);
+    document.addEventListener('touchstart', resetarTempo);
 }
