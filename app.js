@@ -61,7 +61,7 @@ if (loginForm) {
 }
 // --- SISTEMA DE EXPIRAÇÃO POR INATIVIDADE (1 MINUTO) ---
 let tempoInativo;
-const TEMPO_LIMITE = 60 * 1000; // 60 segundos (1 minuto)
+const TEMPO_LIMITE = 120 * 1000; // 60 segundos (2 minuto)
 
 function deslogarPorInatividade() {
     // 1. Removemos os "escutadores" para o mouse não resetar o tempo enquanto o aviso aparece
