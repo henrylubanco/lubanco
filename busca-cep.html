@@ -23,7 +23,6 @@
             padding: 20px;
         }
 
-        /* --- Estilos do Filtro de Busca --- */
         .painel-busca {
             background: white;
             padding: 20px;
@@ -61,7 +60,6 @@
             box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
         }
 
-        /* --- Estilos da Tabela de Resultados --- */
         .tabela-container {
             background: white;
             border-radius: 8px;
@@ -147,64 +145,65 @@
 
     </main>
 
+    <script src="dados-cep.js"></script>
+
     <script>
-        let baseDeDadosCep = [];
         const tabelaResultados = document.getElementById('tabela-resultados');
         const inputCep = document.getElementById('busca-cep');
         const inputEndereco = document.getElementById('busca-endereco');
 
-        // 1. Carregar os dados do arquivo JSON
-        fetch('ceps.json')
-            .then(response => {
-                if (!response.ok) throw new Error("Arquivo ceps.json não encontrado");
-                return response.json();
-            })
-            .then(data => {
-                baseDeDadosCep = data;
-                renderizarTabela(baseDeDadosCep.slice(0, 50)); // Mostra os primeiros 50 ao carregar
-            })
-            .catch(error => {
-                tabelaResultados.innerHTML = `<tr><td colspan="3" class="mensagem-vazia" style="color: red;">Erro: Não foi possível carregar a base de CEPs. Verifique se o arquivo ceps.json existe.</td></tr>`;
-                console.error(error);
-            });
+        // Função auxiliar para pegar o valor independente se a coluna está maiúscula ou minúscula
+        function extrairValor(item, chavesPossiveis) {
+            for (let chave of chavesPossiveis) {
+                if (item[chave] !== undefined) return item[chave];
+            }
+            return '';
+        }
 
-        // 2. Função que desenha a tabela na tela
+        // Função que desenha a tabela
         function renderizarTabela(dados) {
-            tabelaResultados.innerHTML = ''; // Limpa a tabela
+            tabelaResultados.innerHTML = '';
 
             if (dados.length === 0) {
                 tabelaResultados.innerHTML = `<tr><td colspan="3" class="mensagem-vazia">Nenhum resultado encontrado.</td></tr>`;
                 return;
             }
 
-            // Limita a exibição a 100 resultados para não travar o navegador
+            // Limita a exibição inicial a 100 resultados para a tela não travar
             const limite = dados.slice(0, 100);
 
             limite.forEach(item => {
+                // Tenta buscar o valor pelas chaves do Excel que você mandou
+                const vCep = extrairValor(item, ['cep', 'CEP', 'Cep']);
+                const vBairro = extrairValor(item, ['bairro', 'Bairro', 'BAIRRO', 'BAIRRO/LOCALIDADE']);
+                const vRua = extrairValor(item, ['rua', 'Rua', 'RUA']);
+
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td style="font-weight: bold; color: #1e3a8a;">${item.cep || '-'}</td>
-                    <td>${item.bairro || '-'}</td>
-                    <td>${item.rua || '-'}</td>
+                    <td style="font-weight: bold; color: #1e3a8a;">${vCep || '-'}</td>
+                    <td>${vBairro || '-'}</td>
+                    <td>${vRua || '-'}</td>
                 `;
                 tabelaResultados.appendChild(tr);
             });
         }
 
-        // 3. Função de Filtragem Dinâmica
+        // Função de Filtragem Dinâmica
         function filtrarDados() {
-            // Remove traços para facilitar a busca do CEP
+            if (typeof baseDeDadosCep === 'undefined') return;
+
             const termoCep = inputCep.value.replace(/\D/g, ''); 
-            
-            // Converte texto para minúsculo e remove acentos para busca inteligente
             const termoEnd = inputEndereco.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
 
             const resultados = baseDeDadosCep.filter(item => {
-                const cepLimpo = (item.cep || '').replace(/\D/g, '');
-                const ruaLimpa = (item.rua || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-                const bairroLimpo = (item.bairro || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                const vCep = extrairValor(item, ['cep', 'CEP', 'Cep']);
+                const vBairro = extrairValor(item, ['bairro', 'Bairro', 'BAIRRO', 'BAIRRO/LOCALIDADE']);
+                const vRua = extrairValor(item, ['rua', 'Rua', 'RUA']);
 
-                // Verifica se os termos digitados existem nos dados
+                const cepLimpo = vCep.replace(/\D/g, '');
+                const ruaLimpa = vRua.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                const bairroLimpo = vBairro.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+
                 const matchCep = termoCep === '' || cepLimpo.includes(termoCep);
                 const matchEnd = termoEnd === '' || ruaLimpa.includes(termoEnd) || bairroLimpo.includes(termoEnd);
 
@@ -214,7 +213,16 @@
             renderizarTabela(resultados);
         }
 
-        // 4. Adiciona os "escutadores" de digitação
+        // Inicia a tabela assim que a página carrega
+        window.onload = function() {
+            if (typeof baseDeDadosCep !== 'undefined') {
+                renderizarTabela(baseDeDadosCep.slice(0, 50));
+            } else {
+                tabelaResultados.innerHTML = `<tr><td colspan="3" class="mensagem-vazia" style="color: red;">Erro: Arquivo dados-cep.js não foi encontrado ou está formatado incorretamente.</td></tr>`;
+            }
+        };
+
+        // Escuta a digitação
         inputCep.addEventListener('input', filtrarDados);
         inputEndereco.addEventListener('input', filtrarDados);
 
