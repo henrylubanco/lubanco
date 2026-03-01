@@ -23,15 +23,18 @@ const userEmailDisplay = document.getElementById('user-email-display');
 
 const path = window.location.pathname;
 const isLoginPage = path.endsWith('index.html') || path === '/' || path.endsWith('/');
-const isDashboardPage = path.endsWith('dashboard.html');
 
-// Proteção de Rota
+// Proteção de Rota Dinâmica
 onAuthStateChanged(auth, (user) => {
     if (user) {
+        // Se está logado e tenta acessar o login, manda para o dashboard
         if (isLoginPage) window.location.href = 'dashboard.html';
-        if (isDashboardPage && userEmailDisplay) userEmailDisplay.textContent = user.email;
+        
+        // Se a página atual tiver o elemento para mostrar o email, ele atualiza
+        if (userEmailDisplay) userEmailDisplay.textContent = user.email;
     } else {
-        if (isDashboardPage) window.location.href = 'index.html';
+        // Se NÃO está logado e NÃO está na página de login, expulsa para o login
+        if (!isLoginPage) window.location.href = 'index.html';
     }
 });
 
