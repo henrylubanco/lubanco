@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexo Hub - Consulta de CEP</title>
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        .body-interno {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f8fafc;
+        }
+        
+        .main-centralizado {
+            flex: 1;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* --- Estilos do Filtro de Busca --- */
+        .painel-busca {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .filtros-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #1e3a8a;
+            font-size: 0.9rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #1e3a8a;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        /* --- Estilos da Tabela de Resultados --- */
+        .tabela-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .mensagem-vazia {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+        }
+
+        @media (max-width: 600px) {
+            .filtros-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="body-interno">
+    
+    <header style="background-color: #1e3a8a; padding: 20px; color: white; text-align: center;">
+        <h1 style="margin: 0;">Nexo Hub | Consulta de CEP</h1>
+        <a href="dashboard.html" style="color: #e2e8f0; text-decoration: underline; font-size: 0.9rem; margin-top: 10px; display: inline-block;">Voltar ao Painel</a>
+    </header>
+
+    <main class="main-centralizado">
+        
+        <div class="painel-busca">
+            <p style="margin-top: 0; color: #64748b; margin-bottom: 15px;">Digite o CEP ou parte do endereço para buscar em Campos dos Goytacazes.</p>
+            
+            <div class="filtros-container">
+                <div class="input-group">
+                    <label for="busca-cep">Buscar por CEP</label>
+                    <input type="text" id="busca-cep" placeholder="Ex: 28025-551" maxlength="9">
+                </div>
+                <div class="input-group">
+                    <label for="busca-endereco">Buscar por Rua ou Bairro</label>
+                    <input type="text" id="busca-endereco" placeholder="Ex: Pelinca, Alberto Torres...">
+                </div>
+            </div>
+        </div>
+
+        <div class="tabela-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">CEP</th>
+                        <th style="width: 30%;">Bairro</th>
+                        <th style="width: 50%;">Logradouro (Rua)</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-resultados">
+                    <tr>
+                        <td colspan="3" class="mensagem-vazia">Carregando base de dados...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <script>
+        let baseDeDadosCep = [];
+        const tabelaResultados = document.getElementById('tabela-resultados');
+        const inputCep = document.getElementById('busca-cep');
+        const inputEndereco = document.getElementById('busca-endereco');
+
+        // 1. Carregar os dados do arquivo JSON
+        fetch('ceps.json')
+            .then(response => {
+                if (!response.ok) throw new Error("Arquivo ceps.json não encontrado");
+                return response.json();
+            })
+            .then(data => {
+                baseDeDadosCep = data;
+                renderizarTabela(baseDeDadosCep.slice(0, 50)); // Mostra os primeiros 50 ao carregar
+            })
+            .catch(error => {
+                tabelaResultados.innerHTML = `<tr><td colspan="3" class="mensagem-vazia" style="color: red;">Erro: Não foi possível carregar a base de CEPs. Verifique se o arquivo ceps.json existe.</td></tr>`;
+                console.error(error);
+            });
+
+        // 2. Função que desenha a tabela na tela
+        function renderizarTabela(dados) {
+            tabelaResultados.innerHTML = ''; // Limpa a tabela
+
+            if (dados.length === 0) {
+                tabelaResultados.innerHTML = `<tr><td colspan="3" class="mensagem-vazia">Nenhum resultado encontrado.</td></tr>`;
+                return;
+            }
+
+            // Limita a exibição a 100 resultados para não travar o navegador
+            const limite = dados.slice(0, 100);
+
+            limite.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight: bold; color: #1e3a8a;">${item.cep || '-'}</td>
+                    <td>${item.bairro || '-'}</td>
+                    <td>${item.rua || '-'}</td>
+                `;
+                tabelaResultados.appendChild(tr);
+            });
+        }
+
+        // 3. Função de Filtragem Dinâmica
+        function filtrarDados() {
+            // Remove traços para facilitar a busca do CEP
+            const termoCep = inputCep.value.replace(/\D/g, ''); 
+            
+            // Converte texto para minúsculo e remove acentos para busca inteligente
+            const termoEnd = inputEndereco.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+
+            const resultados = baseDeDadosCep.filter(item => {
+                const cepLimpo = (item.cep || '').replace(/\D/g, '');
+                const ruaLimpa = (item.rua || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                const bairroLimpo = (item.bairro || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+
+                // Verifica se os termos digitados existem nos dados
+                const matchCep = termoCep === '' || cepLimpo.includes(termoCep);
+                const matchEnd = termoEnd === '' || ruaLimpa.includes(termoEnd) || bairroLimpo.includes(termoEnd);
+
+                return matchCep && matchEnd;
+            });
+
+            renderizarTabela(resultados);
+        }
+
+        // 4. Adiciona os "escutadores" de digitação
+        inputCep.addEventListener('input', filtrarDados);
+        inputEndereco.addEventListener('input', filtrarDados);
+
+    </script>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
