@@ -59,6 +59,39 @@ if (loginForm) {
             });
     });
 }
+// --- SISTEMA DE EXPIRAÇÃO POR INATIVIDADE (1 MINUTO) ---
+let tempoInativo;
+const TEMPO_LIMITE = 60 * 1000; // 60 segundos * 1000 milissegundos = 1 minuto
+
+function deslogarPorInatividade() {
+    // Se o tempo esgotar, fazemos o logout no Firebase
+    signOut(auth).then(() => {
+        alert("Sua sessão expirou por inatividade de 1 minuto. Por segurança, faça login novamente.");
+        window.location.href = 'index.html';
+    }).catch((error) => {
+        console.error("Erro ao encerrar sessão por inatividade:", error);
+    });
+}
+
+function resetarTempo() {
+    // Cancela o cronômetro anterior e começa um novo do zero
+    clearTimeout(tempoInativo);
+    
+    // Só ativa o cronômetro se o usuário NÃO estiver na tela de login
+    if (!isLoginPage) {
+        tempoInativo = setTimeout(deslogarPorInatividade, TEMPO_LIMITE);
+    }
+}
+
+// Se não estiver na tela de login, monitora qualquer ação do usuário
+if (!isLoginPage) {
+    window.onload = resetarTempo;       // Quando a página carrega
+    document.onmousemove = resetarTempo; // Quando mexe o mouse
+    document.onkeypress = resetarTempo;  // Quando digita algo
+    document.onclick = resetarTempo;     // Quando clica
+    document.onscroll = resetarTempo;    // Quando rola a página
+    document.ontouchstart = resetarTempo;// Quando toca na tela (celular)
+}
 
 // Lógica de Logout
 if (logoutBtn) {
